@@ -1,0 +1,62 @@
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="comoBOX.js"></script>
+<head>
+    <meta charset="utf-8">
+    <title>Food App</title>
+    <style>
+        html {
+            font-family: sans-serif;
+        }
+
+        table {
+            border-collapse: collapse;
+            border: 2px solid rgb(200, 200, 200);
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+        }
+
+        td, th {
+            border: 1px solid rgb(190, 190, 190);
+            padding: 10px 20px;
+        }
+
+        td {
+            text-align: center;
+        }
+
+        caption {
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+<h1>Choose a diet plan</h1>
+<div class="select">
+    <select name="format" id="format">
+        <option selected disabled>Choose a diet plan</option>
+        <option value="pdf">PDF</option>
+        <option value="txt">txt</option>
+        <option value="epub">ePub</option>
+        <option value="fb2">fb2</option>
+        <option value="mobi">mobi</option>
+    </select>
+</div>
+
+<input id="done_button" type="button" value="Done">
+
+<table id="table" style="visibility: hidden">
+    <thead>
+    <tr>
+        <th>food_id</th>
+        <th>data_type</th>
+        <th>food_name</th>
+    </tr>
+    </thead>
+    <tbody class="tbody">
+    </tbody>
+</table>
+
+</body>
+</html>
