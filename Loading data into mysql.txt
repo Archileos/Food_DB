@@ -1,0 +1,39 @@
+Enable permissions:
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '';
+flush privileges;
+
+SET GLOBAL local_infile = true;
+show global variables like 'local_infile';
+
+SET GLOBAL secure_file_priv = "";
+show global variables like 'secure_file_priv';
+
+
+
+
+Create Tables with mysql workbench:
+
+Food: id (int, auto increment, primary key), food_name (medium_text)
+Food_Nutrient: id (int, auto incriment, primary key), fdc_id (int, foreign key), nutrient_id (int, foreign key), amount (float)
+Nutrient: id (int, auto increment, primary key), name (tiny_text), unit_name (tiny_text)
+
+
+
+
+Load Tables:
+
+LOAD DATA LOCAL INFILE 'C:\\Users\\Arthur\\Desktop\\food_nutrient.csv' INTO TABLE food_nutrient
+ FIELDS TERMINATED BY ','
+ LINES TERMINATED BY '\r\n'
+ IGNORE 1 ROWS (id, fdc_id, nutrient_id, amount);
+
+LOAD DATA INFILE 'C:\\Users\\Arthur\\Desktop\\food.csv' INTO TABLE food
+ fields terminated by ',' enclosed by '\"'
+ lines terminated by '\r\n'
+ ignore 1 rows (fdc_id, food_name);
+
+LOAD DATA LOCAL INFILE 'C:\\Users\\Arthur\\Desktop\\nutrient.csv' INTO TABLE nutrient
+ fields terminated by ',' enclosed by '\"'
+ lines terminated by '\r\n'
+ IGNORE 1 ROWS (id, name, unit_name);

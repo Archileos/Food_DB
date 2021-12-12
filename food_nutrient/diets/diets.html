@@ -1,0 +1,50 @@
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="diets.js"></script>
+<head>
+    <meta charset="utf-8">
+    <title>Food App</title>
+    <style>
+        html {
+            font-family: sans-serif;
+        }
+
+        table {
+            border-collapse: collapse;
+            border: 2px solid rgb(200, 200, 200);
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+        }
+
+        td, th {
+            border: 1px solid rgb(190, 190, 190);
+            padding: 10px 20px;
+        }
+
+        td {
+            text-align: center;
+        }
+
+        caption {
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<table id="table">
+    <thead>
+    <tr>
+        <th>diet</th>
+        <th>list of foods</th>
+    </tr>
+    </thead>
+    <tbody class="tbody">
+    </tbody>
+</table>
+
+<input id="create_diet_button" type="button" value="Create diet">
+
+</body>
+</html>

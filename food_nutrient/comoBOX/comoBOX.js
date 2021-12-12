@@ -6,14 +6,11 @@ $(document).ready(function () {
             url: 'http://localhost:8080/list',
             method: 'get',
             success: function (data) {
-                if (data.rows.length > 0) {
-                    for (let index = 0; index < data.rows.length; index++) {
+                if (data.length > 0) {
+                    for (let index = 0; index < data.length; index++) {
                         const newRow = $("<tr>");
-                        let cols = "";
-                        cols += '<td> ' + data.rows[index].fdc_id + '</td>';
-                        cols += '<td> ' + data.rows[index].data_type + '</td>';
-                        cols += '<td> ' + data.rows[index].description_ + '</td>';
-                        newRow.append(cols);
+                        newRow.append('<td> ' + data[index].food_name + '</td>');
+                        newRow.append('<td> ' + data[index].amount + '</td>');
                         $("#table .tbody").append(newRow);
                     }
                 }

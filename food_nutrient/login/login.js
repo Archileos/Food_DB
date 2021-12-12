@@ -1,18 +1,15 @@
-const handler = require(__dirname + "/mySQLhandler/mySQLhandler.js")
+$(document).ready(function () {
 
-const loginForm = document.getElementById("login-form");
-const loginButton = document.getElementById("login-form-submit");
-const loginErrorMsg = document.getElementById("login-error-msg");
+    $('#login-form-submit').on('click', function (event) {
+        event.preventDefault()
+        if ($('#username-field').val() === "user" && $('#password-field').val() === "web_dev") {
+            window.location.href="http://localhost:8080/diets.html";
+        } else {
+            $('#login-error-msg-wrong-first').css('opacity', '1')
+        }
+    })
 
-loginButton.addEventListener("click", (e) => {
-    e.preventDefault();
-    const username = loginForm.username.value;
-    const password = loginForm.password.value;
-
-    if (username === "user" && password === "web_dev") {
-        alert("You have successfully logged in.");
-        location.reload();
-    } else {
-        loginErrorMsg.style.opacity = 1;
-    }
-})
+    $('#register-form-submit').on('click', function () {
+        window.location.href="http://localhost:8080/register.html";
+    })
+});

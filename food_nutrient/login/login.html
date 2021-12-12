@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
   <link rel="stylesheet" href="login.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script defer src="login.js"></script>
 </head>
 
@@ -14,19 +14,18 @@
 <main id="main-holder">
   <h1 id="login-header">Login</h1>
 
-  <div id="login-error-msg-holder">
-    <p id="login-error-msg">Invalid username <span id="error-msg-second-line">and/or password</span></p>
+  <div id="login-error-msg-wrong" class="login-error-msg-holder">
+    <p id="login-error-msg-wrong-first" class="login-error-msg-first">Invalid username <span id="error-msg-wrong-second-line" class="error-msg-second-line">and/or password</span></p>
   </div>
 
   <form id="login-form">
     <input type="text" name="username" id="username-field" class="login-form-field" placeholder="Username">
-    <input type="email" name="mail" id="email" class="login-form-field" placeholder="Email">
     <input type="password" name="password" id="password-field" class="login-form-field" placeholder="Password">
     <input type="submit" value="Login" id="login-form-submit">
   </form>
   <h1>Or, register a new account:</h1>
-  <form method="get" action="../register/register.html" >
-    <input type="submit" value="Register" id="register-form-submit" >
+  <form method="get" >
+    <input type="register" value="Register" id="register-form-submit" >
   </form>
 
 </main>

@@ -15,7 +15,8 @@ exports.connect = function () {
 }
 
 exports.entrylist = function (callback) {
-    con.query("SELECT * FROM food LIMIT 20", function (err, result) {
+    let sql = "select food_name, amount from food, food_nutrient where food_nutrient.fdc_id=food.fdc_id and nutrient_id=1003 limit 20;"
+    con.query(sql, function (err, result) {
         if (err) callback(err, null);
         else callback(null, result);
     });
