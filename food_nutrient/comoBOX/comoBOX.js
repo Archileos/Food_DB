@@ -12,6 +12,13 @@ $(document).ready(function () {
                         newRow.append('<td> ' + data[index].food_name + '</td>');
                         newRow.append('<td> ' + data[index].amount + '</td>');
                         $("#table .tbody").append(newRow);
+                        newRow.click(function () {
+                            let value = ""
+                            $(this).children('td').each(function () {
+                                value += $(this).html() + " "
+                            })
+                            alert(value);
+                        });
                     }
                 }
             },
@@ -20,13 +27,5 @@ $(document).ready(function () {
             }
         })
     })
-
-    $('#table tr').click(function () {
-        let value = ""
-        $(this).children('td').each(function () {
-            value += $(this).html() + " "
-        })
-        alert(value);
-    });
 });
 

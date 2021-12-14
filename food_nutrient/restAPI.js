@@ -1,4 +1,4 @@
-const mySqlHandler = require(__dirname + "\\mySQLhandler\\mySQLhandler");
+const mySqlHandler = require(__dirname + "\\mySQLhandler\\mySQLhandler.js");
 
 exports.createAPI = function (app) {
     return new RESTfulAPI(app);
@@ -66,6 +66,49 @@ class RESTfulAPI {
                     response.status(500).send()
                 } else {
                     response.send(data)
+                }
+            })
+        })
+
+        app.post('/login', function (request, response) {
+            let username = request.body.username
+            let password = request.body.password
+            mySqlHandler.checklogin(username, password, function (err, data) {
+                console.log(data.length)
+                if (err) {
+                    console.log(err)
+                    response.sendStatus(500)
+                } else {
+                    if (data.length > 0) {
+                        console.log("log")
+                        response.sendStatus(200)
+                    } else {
+                        response.sendStatus(401)
+                    }
+                }
+            })
+        })
+
+        app.post('/register', function (request, response) {
+            let username = request.body.username
+            let password = request.body.password
+            mySqlHandler.checkregister(username, function (err, data) {
+                if (err) {
+                    console.log(err)
+                    response.sendStatus(500)
+                } else {
+                    if (data.length > 0) {
+                        response.sendStatus(403)
+                    } else {
+                        mySqlHandler.adduser(username, password, function (err) {
+                            if (err) {
+                                console.log(err)
+                                response.sendStatus(500)
+                            } else {
+                                response.sendStatus(201)
+                            }
+                        })
+                    }
                 }
             })
         })
