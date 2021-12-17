@@ -74,13 +74,11 @@ class RESTfulAPI {
             let username = request.body.username
             let password = request.body.password
             mySqlHandler.checklogin(username, password, function (err, data) {
-                console.log(data.length)
                 if (err) {
                     console.log(err)
                     response.sendStatus(500)
                 } else {
                     if (data.length > 0) {
-                        console.log("log")
                         response.sendStatus(200)
                     } else {
                         response.sendStatus(401)

@@ -2,13 +2,15 @@ $(document).ready(function () {
 
     $('#login-form-submit').on('click', function (event) {
         event.preventDefault()
-        let data = {username: $('#username-field').val(), password: $('#password-field').val()}
+        let username = $('#username-field').val()
+        let data = {username: username, password: $('#password-field').val()}
         $.ajax({
             url: 'http://localhost:8080/login',
             method: 'post',
             contentType: "application/json",
             data: JSON.stringify(data),
             success: function () {
+                localStorage["user"] = username;
                 window.location.href="http://localhost:8080/diets.html";
             },
             error: function () {
