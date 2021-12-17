@@ -10,6 +10,7 @@ $(document).ready(function () {
             data: JSON.stringify(data),
             success: function () {
                 window.location.href="http://localhost:8080/diets.html";
+                //fdfd
             },
             error: function () {
                 $('#login-error-msg-wrong-first').css('opacity', '1')
