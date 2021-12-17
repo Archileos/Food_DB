@@ -12,6 +12,7 @@ $(document).ready(function () {
             success: function () {
                 localStorage["user"] = username;
                 window.location.href="http://localhost:8080/diets.html";
+
             },
             error: function () {
                 $('#login-error-msg-wrong-first').css('opacity', '1')
