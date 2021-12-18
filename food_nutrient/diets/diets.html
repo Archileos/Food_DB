@@ -1,47 +1,113 @@
+<!DOCTYPE html>
 <html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="diets.js"></script>
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Food App</title>
+    <link rel="stylesheet" href="diets.css">
     <style>
-        html {
-            font-family: sans-serif;
-        }
-
-        table {
-            border-collapse: collapse;
-            border: 2px solid rgb(200, 200, 200);
-            letter-spacing: 1px;
-            font-size: 0.8rem;
-        }
-
-        td, th {
-            border: 1px solid rgb(190, 190, 190);
-            padding: 10px 20px;
-        }
-
-        td {
+        table.redTable {
+            font-family: Arial, Helvetica, sans-serif;
+            border: 2px solid #A40808;
+            background-color: #EEE7DB;
+            width: 100%;
+            height: 100%;
             text-align: center;
+            border-collapse: collapse;
+        }
+        table.redTable td, table.redTable th {
+            border: 1px solid #AAAAAA;
+            padding: 3px 2px;
+        }
+        table.redTable tbody td {
+            font-size: 13px;
+            color: #454545;
+        }
+        table.redTable tr:nth-child(even) {
+            background: #FFD0C7;
+        }
+        table.redTable thead {
+            background: #A40808;
+            background: -moz-linear-gradient(top, #bb4646 0%, #ad2020 66%, #A40808 100%);
+            background: -webkit-linear-gradient(top, #bb4646 0%, #ad2020 66%, #A40808 100%);
+            background: linear-gradient(to bottom, #bb4646 0%, #ad2020 66%, #A40808 100%);
+            border-bottom: 0px solid #4B4B4B;
+        }
+        table.redTable thead th {
+            font-size: 19px;
+            font-weight: bold;
+            color: #FFFFFF;
+            text-align: center;
+            border-left: 2px solid #A40808;
+        }
+        table.redTable thead th:first-child {
+            border-left: none;
         }
 
-        caption {
-            padding: 10px;
+        table.redTable tfoot {
+            font-size: 13px;
+            font-weight: bold;
+            color: #FFFFFF;
+            background: #A40808;
+            border-top: 0px solid #444444;
+        }
+        table.redTable tfoot td {
+            font-size: 13px;
+        }
+        table.redTable tfoot .links {
+            text-align: right;
+        }
+        table.redTable tfoot .links a{
+            display: inline-block;
+            background: #FFFFFF;
+            color: #A40808;
+            padding: 2px 8px;
+            border-radius: 5px;
         }
     </style>
 </head>
 
 <body>
 
-<table id="table">
+<table id="table" class="redTable">
     <thead>
     <tr>
         <th>diet</th>
         <th>list of foods</th>
     </tr>
     </thead>
-    <tbody class="tbody">
+    <tfoot>
+    <tr>
+        <td colspan="2">
+            <div class="links"><a href="#">&laquo;</a> <a class="active" href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a> <a href="#">&raquo;</a></div>
+        </td>
+    </tr>
+    </tfoot>
+    <tbody>
+    <tr>
+        <td>cell1_1</td><td>cell2_1</td></tr>
+    <tr>
+        <td>cell1_2</td><td>cell2_2</td></tr>
+    <tr>
+        <td>cell1_3</td><td>cell2_3</td></tr>
+    <tr>
+        <td>cell1_4</td><td>cell2_4</td></tr>
+    <tr>
+        <td>cell1_5</td><td>cell2_5</td></tr>
+    <tr>
+        <td>cell1_6</td><td>cell2_6</td></tr>
+    <tr>
+        <td>cell1_7</td><td>cell2_7</td></tr>
+    <tr>
+        <td>cell1_8</td><td>cell2_8</td></tr>
+    <tr>
+        <td>cell1_9</td><td>cell2_9</td></tr>
+    <tr>
+        <td>cell1_10</td><td>cell2_10</td></tr>
     </tbody>
+    </tr>
 </table>
 
 <input id="create_diet_button" type="button" value="Create diet">
