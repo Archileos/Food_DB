@@ -2,6 +2,7 @@ $(document).ready(function () {
 
     $('#done_button').on('click', function () {
         $("#table1").css('visibility', 'visible')
+        $("#table2").css('visibility', 'visible')
         $.ajax({
             url: 'http://localhost:8080/list',
             method: 'get',
@@ -12,6 +13,7 @@ $(document).ready(function () {
                         newRow.append('<td> ' + data[index].food_name + '</td>');
                         newRow.append('<td> ' + data[index].amount + '</td>');
                         $("#table1 .tbody").append(newRow);
+                        $("#table2 .tbody").append(newRow);
                         newRow.click(function () {
                             let value = ""
                             $(this).children('td').each(function () {
