@@ -58,6 +58,15 @@ class RESTfulAPI {
             response.sendFile('diets.js', {root: __dirname + "/diets"});
         })
 
+        app.get('/plan_create.html', function (request, response) {
+            console.log('GET request received at /plan_create');
+            response.sendFile('plan_create.html', {root: __dirname + "/plan_create"});
+        })
+
+        app.get('/plan_create.js', function (request, response) {
+            response.sendFile('plan_create.js', {root: __dirname + "/plan_create"});
+        })
+
         app.get('/list', function (request, response) {
             console.log('GET request received at /list');
             mySqlHandler.entrylist(function (err, data) {

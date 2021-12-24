@@ -8,11 +8,12 @@
     <title>Food App</title>
     <link rel="stylesheet" href="diets.css">
     <style>
+        /*first table*/
         table.redTable {
             font-family: Arial, Helvetica, sans-serif;
             border: 2px solid #A40808;
             background-color: #EEE7DB;
-            width: 100%;
+            width: 45%;
             height: 100%;
             text-align: center;
             border-collapse: collapse;
@@ -66,16 +67,75 @@
             padding: 2px 8px;
             border-radius: 5px;
         }
+        .selected {
+            color: deeppink;
+        }
+        /*second table*/
+        table.greenTable {
+            font-family: Georgia, serif;
+            border: 4px solid #24943A;
+            background-color: #D4EED1;
+            width: 45%;
+            height: 100%;
+            text-align: center;
+        }
+        table.greenTable td, table.greenTable th {
+            border: 1px solid #24943A;
+            padding: 3px 2px;
+        }
+        table.greenTable tbody td {
+            font-size: 13px;
+        }
+        table.greenTable thead {
+            background: #24943A;
+            background: -moz-linear-gradient(top, #5baf6b 0%, #3a9e4d 66%, #24943A 100%);
+            background: -webkit-linear-gradient(top, #5baf6b 0%, #3a9e4d 66%, #24943A 100%);
+            background: linear-gradient(to bottom, #5baf6b 0%, #3a9e4d 66%, #24943A 100%);
+            border-bottom: 0px solid #444444;
+        }
+        table.greenTable thead th {
+            font-size: 19px;
+            font-weight: bold;
+            color: #F0F0F0;
+            border-left: 2px solid #24943A;
+            text-align: center;
+        }
+        table.greenTable thead th:first-child {
+            border-left: none;
+        }
+
+        table.greenTable tfoot {
+            font-size: 13px;
+            font-weight: bold;
+            color: #F0F0F0;
+            background: #24943A;
+            background: -moz-linear-gradient(top, #5baf6b 0%, #3a9e4d 66%, #24943A 100%);
+            background: -webkit-linear-gradient(top, #5baf6b 0%, #3a9e4d 66%, #24943A 100%);
+            background: linear-gradient(to bottom, #5baf6b 0%, #3a9e4d 66%, #24943A 100%);
+            border-top: 1px solid #24943A;
+        }
+        table.greenTable tfoot td {
+            font-size: 13px;
+        }
+        table.greenTable tfoot .links {
+            text-align: right;
+        }
+        table.greenTable tfoot .links a{
+            display: inline-block;
+            background: #FFFFFF;
+            color: #24943A;
+            padding: 2px 8px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 
 <body>
-
-<table id="table" class="redTable">
+<table id="table3" class="greenTable" align="right" style="visibility: hidden">
     <thead>
     <tr>
-        <th>diet</th>
-        <th>list of foods</th>
+        <th>Food</th>
+        <th>Description</th>
     </tr>
     </thead>
     <tfoot>
@@ -85,6 +145,31 @@
         </td>
     </tr>
     </tfoot>
+    <tbody>
+    <tr>
+        <td>cell1_1</td><td>cell2_1</td></tr>
+    <tr>
+        <td>cell1_2</td><td>cell2_2</td></tr>
+    <tr>
+        <td>cell1_3</td><td>cell2_3</td></tr>
+    <tr>
+        <td>cell1_4</td><td>cell2_4</td></tr>
+    <tr>
+        <td>cell1_5</td><td>cell2_5</td></tr>
+    <tr>
+        <td>cell1_6</td><td>cell2_6</td></tr>
+    <tr>
+        <td>cell1_7</td><td>cell2_7</td></tr>
+    </tbody>
+    </tr>
+</table>
+<table id="table" class="redTable" >
+    <thead>
+    <tr>
+        <th>Diet</th>
+        <th>From plan</th>
+    </tr>
+    </thead>
     <tbody>
     <tr>
         <td>cell1_1</td><td>cell2_1</td></tr>
@@ -110,7 +195,10 @@
     </tr>
 </table>
 
+
+
 <input id="create_diet_button" type="button" value="Create diet">
+<input id="update_diet_button" type="button" value="Update diet">
 
 </body>
 </html>

@@ -5,10 +5,17 @@ $(document).ready(function () {
     })
 
     $('#table tr').click(function () {
+        $("#table3").css('visibility', 'visible')
         let value = ""
         $(this).children('td').each(function () {
             value += $(this).html() + " "
         })
+        $('#table tr').each(function () {
+            $(this).css('backgroundColor', '')
+            $(this).removeClass('selected');
+        })
+        $(this).css('backgroundColor', 'yellow')
+        $(this).addClass('selected');
         alert(value);
     });
 });
