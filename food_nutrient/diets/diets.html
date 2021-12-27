@@ -8,122 +8,113 @@
     <title>Food App</title>
     <link rel="stylesheet" href="diets.css">
     <style>
-        /*first table*/
-        table.redTable {
+        body {
+            height: 100%;
+            margin: 0;
             font-family: Arial, Helvetica, sans-serif;
-            border: 2px solid #A40808;
-            background-color: #EEE7DB;
+            justify-items: center;
+            align-items: center;
+            background-color: #31043d;
+        }
+        #demoObject {
+            -webkit-box-shadow: 0 20px 0 -10px #FFFFFF, 0 -20px 0 -10px #FFFFFF, 20px 0 0 -10px #FFFFFF, -20px 0 0 -10px #FFFFFF, 0 0 0 10px #FF0000, 7px 5px 37px 18px #000000;
+            box-shadow: 0 20px 0 -10px #621c67, 0 -20px 0 -10px #621c67, 20px 0 0 -10px #621c67, -20px 0 0 -10px #621c67, 0 0 0 10px #C77DBA, 7px 5px 37px 18px #000000;
+            background: #621c67;
+            height: 2em;
+            width: 15em;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            color: #cccccc;
+        }
+        body#tinymce {
+            background: #FFFFFF
+        }
+        /*first table*/
+        table.purpleTable {
+            border: 2px solid #AA729D;
+            background-color: #EED5EE;
             width: 45%;
             height: 100%;
             text-align: center;
             border-collapse: collapse;
         }
-        table.redTable td, table.redTable th {
-            border: 1px solid #AAAAAA;
+        table.purpleTable td, table.purpleTable th {
+            border: 1px solid #AA729D;
             padding: 3px 2px;
         }
-        table.redTable tbody td {
+        table.purpleTable tbody td {
             font-size: 13px;
-            color: #454545;
+            font-weight: bold;
         }
-        table.redTable tr:nth-child(even) {
-            background: #FFD0C7;
+        table.purpleTable tr:nth-child(even) {
+            background: #C77DBA;
         }
-        table.redTable thead {
-            background: #A40808;
-            background: -moz-linear-gradient(top, #bb4646 0%, #ad2020 66%, #A40808 100%);
-            background: -webkit-linear-gradient(top, #bb4646 0%, #ad2020 66%, #A40808 100%);
-            background: linear-gradient(to bottom, #bb4646 0%, #ad2020 66%, #A40808 100%);
-            border-bottom: 0px solid #4B4B4B;
+        table.purpleTable thead {
+            background: #7A247F;
         }
-        table.redTable thead th {
+        table.purpleTable thead th {
             font-size: 19px;
             font-weight: bold;
             color: #FFFFFF;
             text-align: center;
-            border-left: 2px solid #A40808;
+            border-left: 2px solid #AA729D;
         }
-        table.redTable thead th:first-child {
+        table.purpleTable thead th:first-child {
             border-left: none;
-        }
-
-        table.redTable tfoot {
-            font-size: 13px;
-            font-weight: bold;
-            color: #FFFFFF;
-            background: #A40808;
-            border-top: 0px solid #444444;
-        }
-        table.redTable tfoot td {
-            font-size: 13px;
-        }
-        table.redTable tfoot .links {
-            text-align: right;
-        }
-        table.redTable tfoot .links a{
-            display: inline-block;
-            background: #FFFFFF;
-            color: #A40808;
-            padding: 2px 8px;
-            border-radius: 5px;
         }
         .selected {
             color: deeppink;
         }
         /*second table*/
-        table.greenTable {
-            font-family: Georgia, serif;
-            border: 4px solid #24943A;
-            background-color: #D4EED1;
+        table.secondPurpleTable {
+            border: 2px solid #B20298;
+            background-color: #EED5EE;
             width: 45%;
             height: 100%;
             text-align: center;
+            border-collapse: collapse;
         }
-        table.greenTable td, table.greenTable th {
-            border: 1px solid #24943A;
+        table.secondPurpleTable td, table.secondPurpleTable th {
+            border: 2px solid #AA729D;
             padding: 3px 2px;
         }
-        table.greenTable tbody td {
+        table.secondPurpleTable tbody td {
             font-size: 13px;
+            /*font-weight: bold;*/
         }
-        table.greenTable thead {
-            background: #24943A;
-            background: -moz-linear-gradient(top, #5baf6b 0%, #3a9e4d 66%, #24943A 100%);
-            background: -webkit-linear-gradient(top, #5baf6b 0%, #3a9e4d 66%, #24943A 100%);
-            background: linear-gradient(to bottom, #5baf6b 0%, #3a9e4d 66%, #24943A 100%);
-            border-bottom: 0px solid #444444;
+        table.secondPurpleTable thead {
+            background: #85278B;
         }
-        table.greenTable thead th {
+        table.secondPurpleTable thead th {
             font-size: 19px;
             font-weight: bold;
-            color: #F0F0F0;
-            border-left: 2px solid #24943A;
+            color: #FFFFFF;
             text-align: center;
+            border-left: 2px solid #EED5EE;
         }
-        table.greenTable thead th:first-child {
+        table.secondPurpleTable thead th:first-child {
             border-left: none;
         }
-
-        table.greenTable tfoot {
+        table.secondPurpleTable tfoot {
             font-size: 13px;
             font-weight: bold;
-            color: #F0F0F0;
-            background: #24943A;
-            background: -moz-linear-gradient(top, #5baf6b 0%, #3a9e4d 66%, #24943A 100%);
-            background: -webkit-linear-gradient(top, #5baf6b 0%, #3a9e4d 66%, #24943A 100%);
-            background: linear-gradient(to bottom, #5baf6b 0%, #3a9e4d 66%, #24943A 100%);
-            border-top: 1px solid #24943A;
+            color: #FFFFFF;
+            background: #85278B;
+            background: -moz-linear-gradient(top, #a35da8 0%, #913c96 66%, #85278B 100%);
+            background: -webkit-linear-gradient(top, #a35da8 0%, #913c96 66%, #85278B 100%);
+            background: linear-gradient(to bottom, #a35da8 0%, #913c96 66%, #85278B 100%);
         }
-        table.greenTable tfoot td {
+        table.secondPurpleTable tfoot td {
             font-size: 13px;
         }
-        table.greenTable tfoot .links {
+        table.secondPurpleTable tfoot .links {
             text-align: right;
         }
-        table.greenTable tfoot .links a{
+        table.secondPurpleTable tfoot .links a{
             display: inline-block;
             background: #FFFFFF;
-            color: #24943A;
+            color: #AA729D;
             padding: 2px 8px;
             border-radius: 5px;
         }
@@ -131,7 +122,10 @@
 </head>
 
 <body>
-<table id="table3" class="greenTable" align="right" style="visibility: hidden">
+<br>
+<h1 id="demoObject">choose some diet and check what it contains</h1>
+<br>
+<table id="table3" class="secondPurpleTable" align="right" style="visibility: hidden">
     <thead>
     <tr>
         <th>Food</th>
@@ -160,14 +154,38 @@
         <td>cell1_6</td><td>cell2_6</td></tr>
     <tr>
         <td>cell1_7</td><td>cell2_7</td></tr>
+    <tr>
+        <td>cell1_2</td><td>cell2_2</td></tr>
+    <tr>
+        <td>cell1_3</td><td>cell2_3</td></tr>
+    <tr>
+        <td>cell1_4</td><td>cell2_4</td></tr>
+    <tr>
+        <td>cell1_5</td><td>cell2_5</td></tr>
+    <tr>
+        <td>cell1_6</td><td>cell2_6</td></tr>
+    <tr>
+        <td>cell1_7</td><td>cell2_7</td></tr>
+    <tr>
+        <td>cell1_2</td><td>cell2_2</td></tr>
+    <tr>
+        <td>cell1_3</td><td>cell2_3</td></tr>
+    <tr>
+        <td>cell1_4</td><td>cell2_4</td></tr>
+    <tr>
+        <td>cell1_5</td><td>cell2_5</td></tr>
+    <tr>
+        <td>cell1_6</td><td>cell2_6</td></tr>
+    <tr>
+        <td>cell1_7</td><td>cell2_7</td></tr>
     </tbody>
     </tr>
 </table>
-<table id="table" class="redTable" >
+<table id="table" class="purpleTable" >
     <thead>
     <tr>
         <th>Diet</th>
-        <th>From plan</th>
+        <th>Plan</th>
     </tr>
     </thead>
     <tbody>
@@ -189,14 +207,9 @@
         <td>cell1_8</td><td>cell2_8</td></tr>
     <tr>
         <td>cell1_9</td><td>cell2_9</td></tr>
-    <tr>
-        <td>cell1_10</td><td>cell2_10</td></tr>
     </tbody>
-    </tr>
 </table>
-
-
-
+<br>
 <input id="create_diet_button" type="button" value="Create diet">
 <input id="update_diet_button" type="button" value="Update diet">
 

@@ -7,67 +7,38 @@
     <meta charset="utf-8">
     <title>Food App</title>
     <style>
-        /*first table*/
-        table.blueTable {
-            border: 1px solid #1C6EA4;
-            background-color: #EEEEEE;
-            width: 45%;
-            height: 70%;
-            text-align: left;
-            border-collapse: collapse;
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #695e0b;
         }
-        table.blueTable td, table.blueTable th {
-            border: 1px solid #AAAAAA;
-            padding: 3px 2px;
+        p1{
+            font-size: 19px;
+            text-decoration: underline;
         }
-        table.blueTable tbody td {
-            font-size: 13px;
-        }
-        table.blueTable tr:nth-child(even) {
-            background: #D0E4F5;
-        }
-        table.blueTable thead {
-            background: #1C6EA4;
-            background: -moz-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
-            background: -webkit-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
-            background: linear-gradient(to bottom, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
-            border-bottom: 2px solid #444444;
-        }
-        table.blueTable thead th {
+        #name_diet{
             font-size: 15px;
-            font-weight: bold;
-            color: #FFFFFF;
-            border-left: 2px solid #D0E4F5;
         }
-        table.blueTable thead th:first-child {
-            border-left: none;
+        #format{
+            font-size: 15px;
         }
-
-        table.blueTable tfoot {
-            font-size: 14px;
-            font-weight: bold;
-            color: #FFFFFF;
-            background: #D0E4F5;
-            background: -moz-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
-            background: -webkit-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
-            background: linear-gradient(to bottom, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
-            border-top: 2px solid #444444;
+        #demoObject {
+            -webkit-box-shadow: 0 20px 0 -10px #FFFFFF, 0 -20px 0 -10px #FFFFFF, 20px 0 0 -10px #FFFFFF, -20px 0 0 -10px #FFFFFF, 0 0 0 10px #FF0000, 7px 5px 37px 18px #000000;
+            box-shadow: 0 20px 0 -10px #000000, 0 -20px 0 -10px #000000, 20px 0 0 -10px #000000, -20px 0 0 -10px #000000, 0 0 0 10px #E3DE20, 7px 5px 37px 18px #000000;
+            background: #000000;
+            height: 1em;
+            width: 10em;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            color: #cccccc;
         }
-        table.blueTable tfoot td {
-            font-size: 14px;
+        body#tinymce {
+            background: #FFFFFF
         }
-        table.blueTable tfoot .links {
-            text-align: right;
-        }
-        table.blueTable tfoot .links a{
-            display: inline-block;
-            background: #1C6EA4;
-            color: #FFFFFF;
-            padding: 2px 8px;
-            border-radius: 5px;
-        }
-        /*second table*/
-        table.darkTable {
+        /*first table*/
+        table.FirstDarkTable {
             font-family: "Arial Black", Gadget, sans-serif;
             border: 2px solid #000000;
             background-color: #4A4A4A;
@@ -76,16 +47,71 @@
             text-align: center;
             border-collapse: collapse;
         }
+        table.FirstDarkTable td, table.FirstDarkTable th {
+            border: 2px solid #000000;
+            padding: 3px 2px;
+        }
+        table.FirstDarkTable tbody td {
+            font-size: 13px;
+            color: #E6E6E6;
+        }
+        table.FirstDarkTable tr:nth-child(even) {
+            background: #888888;
+        }
+        table.FirstDarkTable thead {
+            background: #000000;
+            border-bottom: 3px solid #000000;
+        }
+        table.FirstDarkTable thead th {
+            font-size: 15px;
+            font-weight: bold;
+            color: #E6E6E6;
+            text-align: center;
+            border-left: 2px solid #4A4A4A;
+        }
+        table.FirstDarkTable thead th:first-child {
+            border-left: none;
+        }
+        table.FirstDarkTable tfoot {
+            font-size: 12px;
+            font-weight: bold;
+            color: #E6E6E6;
+            background: #000000;
+            background: -moz-linear-gradient(top, #404040 0%, #191919 66%, #000000 100%);
+            background: -webkit-linear-gradient(top, #404040 0%, #191919 66%, #000000 100%);
+            background: linear-gradient(to bottom, #404040 0%, #191919 66%, #000000 100%);
+            border-top: 1px solid #4A4A4A;
+        }
+        table.FirstDarkTable tfoot td {
+            font-size: 12px;
+        }
+        table.FirstDarkTable tfoot .links {
+            text-align: right;
+        }
+        table.FirstDarkTable tfoot .links a {
+            display: inline-block;
+            background: #888888;
+            color: #ffffff;
+            padding: 2px 8px;
+            border-radius: 5px;
+        }
+        /*second table*/
+        table.darkTable {
+            font-family: "Arial Black", Gadget, sans-serif;
+            border: 2px solid #000000;
+            background-color: #888888;
+            width: 45%;
+            height: 50%;
+            text-align: center;
+            border-collapse: collapse;
+        }
         table.darkTable td, table.darkTable th {
-            border: 1px solid #4A4A4A;
+            border: 2px solid #000000;
             padding: 3px 2px;
         }
         table.darkTable tbody td {
             font-size: 13px;
             color: #E6E6E6;
-        }
-        table.darkTable tr:nth-child(even) {
-            background: #888888;
         }
         table.darkTable thead {
             background: #000000;
@@ -101,60 +127,36 @@
         table.darkTable thead th:first-child {
             border-left: none;
         }
-
-        table.darkTable tfoot {
-            font-size: 12px;
-            font-weight: bold;
-            color: #E6E6E6;
-            background: #000000;
-            background: -moz-linear-gradient(top, #404040 0%, #191919 66%, #000000 100%);
-            background: -webkit-linear-gradient(top, #404040 0%, #191919 66%, #000000 100%);
-            background: linear-gradient(to bottom, #404040 0%, #191919 66%, #000000 100%);
-            border-top: 1px solid #4A4A4A;
-        }
         table.darkTable tfoot td {
             font-size: 12px;
         }
-        table.darkTable tfoot .links {
-            text-align: right;
-        }
-        table.darkTable tfoot .links a {
-            display: inline-block;
-            background: #1C6EA4;
-            color: #FFFFFF;
-            padding: 2px 8px;
-            border-radius: 5px;
-        }
     </style>
 </head>
-
 <body>
-<h1>Choose a diet plan</h1>
+<br>
+<h1 id="demoObject">Choose a diet plan</h1>
+<br>
 <div class="select">
     <select name="format" id="format">
         <option selected disabled>Choose a diet plan</option>
         <option value="Protein">Protein</option>
+        <option value="Vitamin C">Vitamin C</option>
+        <option value="Magnesium">Magnesium</option>
     </select>
     <input id="done_button" type="button" value="Done">
     <p1>Or, create your own plan:</p1>
     <input id="create_button" type="button" value="create">
 </div>
+<br>
 
 <table id="table2" class="darkTable" align="right" style="visibility: hidden">
     <thead>
     <tr>
-        <th>XXX</th>
-        <th>YYYY</th>
-        <th>ZZZ</th>
+        <th>Food name</th>
+        <th>Amount (g)</th>
+        <th>Description</th>
     </tr>
     </thead>
-    <tfoot>
-    <tr>
-        <td colspan="3">
-            <div class="links"><a href="#">&laquo;</a> <a class="active" href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a> <a href="#">&raquo;</a></div>
-        </td>
-    </tr>
-    </tfoot>
     <tbody>
     <tr>
         <td>cell1_1</td><td>cell2_1</td><td>cell3_1</td></tr>
@@ -170,13 +172,20 @@
         <td>cell1_6</td><td>cell2_6</td><td>cell3_6</td></tr>
     <tr>
         <td>cell1_7</td><td>cell2_7</td><td>cell3_7</td></tr>
+    <tr>
+        <td>cell1_5</td><td>cell2_5</td><td>cell3_5</td></tr>
+    <tr>
+        <td>cell1_6</td><td>cell2_6</td><td>cell3_6</td></tr>
+    <tr>
+        <td>cell1_7</td><td>cell2_7</td><td>cell3_7</td></tr>
+
     </tbody>
 </table>
-<table id="table1" class="blueTable" style="visibility: hidden">
+<table id="table1" class="FirstDarkTable" style="visibility: hidden">
     <thead>
     <tr>
-        <th>food_name</th>
-        <th>amount</th>
+        <th>Food name</th>
+        <th>Amount (g)</th>
     </tr>
     </thead>
     <tfoot>
@@ -201,12 +210,18 @@
         <td>cell1_6</td><td>cell2_6</td></tr>
     <tr>
         <td>cell1_7</td><td>cell2_7</td></tr>
+    <tr>
+        <td>cell1_8</td><td>cell2_8</td></tr>
+    <tr>
+        <td>cell1_9</td><td>cell2_9</td></tr>
+    <tr>
+        <td>cell1_10</td><td>cell2_10</td></tr>
     </tbody>
 </table>
+<br>
 <input type="button" value="Name your diet" id="name_diet" style="visibility: hidden"/>
-
 <div id="dialog">
-    <input type="text" id="diet_name" style=" display: inline-block;">
+    <input type="text" id="diet_name" style="display: inline-block;">
 </div>
 
 </body>
