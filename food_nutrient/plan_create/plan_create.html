@@ -16,8 +16,8 @@
         }
         #demoObject {
             -webkit-box-shadow: 0 20px 0 -10px #FFFFFF, 0 -20px 0 -10px #FFFFFF, 20px 0 0 -10px #FFFFFF, -20px 0 0 -10px #FFFFFF, 0 0 0 10px #FF0000, 7px 5px 37px 18px #000000;
-            box-shadow: 0 20px 0 -10px #FFFFFF, 0 -20px 0 -10px #FFFFFF, 20px 0 0 -10px #FFFFFF, -20px 0 0 -10px #FFFFFF, 0 0 0 10px #4cbb4e, 7px 5px 37px 18px #000000;
-            background: #FFFFFF;
+            box-shadow: 0 20px 0 -10px #e8e5e5, 0 -20px 0 -10px #e8e5e5, 20px 0 0 -10px #e8e5e5, -20px 0 0 -10px #e8e5e5, 0 0 0 10px #4cbb4e, 7px 5px 37px 18px #000000;
+            background: #e8e5e5;
             height: 3em;
             width: 15em;
             margin-left: auto;
@@ -27,7 +27,12 @@
         body#tinymce {
             background: #FFFFFF
         }
-
+        #done{
+            border-radius: 5px 20px 5px;
+        }
+        #Advanced_button{
+            border-radius: 5px 20px 5px;
+        }
         ul {
             list-style: none;
             display: inline-flex;
@@ -38,6 +43,7 @@
         li {
             padding: 1em;
             margin: 2px;
+            border-radius: 5px 20px 5px;
             background-color: #ccc;
         }
 
@@ -51,13 +57,15 @@
         li1 {
             padding: 1em;
             margin: 10px;
+            border-radius: 5px 20px 5px;
             background-color: #969696;
         }
     </style>
 </head>
 <body>
 <br>
-<div id="demoObject">Choose which nutrient do you want to limit, and how much do you want to limit it (g)</div>
+<div id="demoObject" style="font-size: 25px">Create your own plan: Choose which nutrient's and how much you want to limit them(g)</div>
+<br>
 <div>
     <ul>
         <li><input type="checkbox" name="myCheckbox">Protein <input type="number" id="txt1" style="display: inline-block; width:60px"></li>
@@ -65,8 +73,8 @@
         <li><input type="checkbox" name="myCheckbox">Fats <input type="number" id="txt3" style=" display: inline-block; width:60px"></li>
     </ul>
 </div>
-If you finished, please press: <input id="done" type="button" value="Done">
-<div style="align-items: flex-start">Otherwise: <input id="Advanced_button" type="button" value="Advanced"></div>
+<div style="color: #cccccc">If you finished, please press: <input id="done" type="button" value="Done"></div>
+<div style="align-items: flex-start; color: #cccccc; text-decoration: underline" >Otherwise: <input id="Advanced_button" type="button" value="Advanced"></div>
 <div  id="div1" style="visibility: hidden">
     <ul2>
         <li1><input type="checkbox" name="myCheckbox">O vitamin D___ <input type="number" style="display: inline-block; width:60px"></li1>

@@ -72,19 +72,19 @@ body {
     width: 45%;
     padding: 7px;
     border: none;
-    border-radius: 5px;
     color: white;
     font-weight: bold;
     background-color: #560b0b;
     cursor: pointer;
     outline: none;
+    border-radius: 5px 20px 5px;
 }
 #register-form-submit {
     text-align: center;
     width: 45%;
     padding: 7px;
     border: none;
-    border-radius: 5px;
+    border-radius: 5px 20px 5px;
     color: white;
     font-weight: bold;
     background-color: #560b0b;
