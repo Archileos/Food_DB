@@ -16,8 +16,7 @@ $(document).ready(function () {
                         const newRow = $("<tr>");
                         newRow.append('<td> ' + data[index].food_name + '</td>');
                         newRow.append('<td> ' + data[index].amount + '</td>');
-                        $("#table1 .tbody").append(newRow);
-                        $("#table2 .tbody").append(newRow);
+                        $("#table1 tbody").append(newRow);
                         newRow.click(function () {
                             let value = ""
                             $(this).children('td').each(function () {

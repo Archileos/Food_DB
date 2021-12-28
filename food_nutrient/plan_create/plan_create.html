@@ -60,27 +60,41 @@
             border-radius: 5px 20px 5px;
             background-color: #969696;
         }
+
+        .links {
+            text-align: right;
+        }
+        .links a{
+            display: inline-block;
+            background: #FFFFFF;
+            color: #AA729D;
+            padding: 2px 8px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
 <br>
 <div id="demoObject" style="font-size: 25px">Create your own plan: Choose which nutrient's and how much you want to limit them(g)</div>
 <br>
-<div>
+<div id="div0">
     <ul>
-        <li><input type="checkbox" name="myCheckbox">Protein <input type="number" id="txt1" style="display: inline-block; width:60px"></li>
-        <li><input type="checkbox" name="myCheckbox">Carbohydrate <input type="number" id="txt2" style=" display: inline-block; width:60px"></li>
-        <li><input type="checkbox" name="myCheckbox">Fats <input type="number" id="txt3" style=" display: inline-block; width:60px"></li>
+        <li><input type="checkbox" name="myCheckbox">Protein<input type="number" id="txt1" style="display: inline-block; width:60px"></li>
+        <li><input type="checkbox" name="myCheckbox">Carbohydrate<input type="number" id="txt2" style=" display: inline-block; width:60px"></li>
+        <li><input type="checkbox" name="myCheckbox">Fats<input type="number" id="txt3" style=" display: inline-block; width:60px"></li>
+        <li><input type="checkbox" name="myCheckbox">Calories<input type="number" id="txt4" style=" display: inline-block; width:60px"></li>
     </ul>
 </div>
 <div style="color: #cccccc">If you finished, please press: <input id="done" type="button" value="Done"></div>
 <div style="align-items: flex-start; color: #cccccc; text-decoration: underline" >Otherwise: <input id="Advanced_button" type="button" value="Advanced"></div>
 <div  id="div1" style="visibility: hidden">
-    <ul2>
-        <li1><input type="checkbox" name="myCheckbox">O vitamin D___ <input type="number" style="display: inline-block; width:60px"></li1>
-        <li1><input type="checkbox" name="myCheckbox">item 2 <input type="number" style="display: inline-block; width:60px"></li1>
-        <li1><input type="checkbox" name="myCheckbox">item 3 <input type="number" style="display: inline-block; width:60px"></li1>
-    </ul2>
+</div>
+<div class="links"><a id="backward">&laquo;</a><a id="forward">&raquo;</a></div>
+<div id="dialog">
+    Plan name:
+    <input type="text" id="plan_name" style="display: inline-block;"> <br>
+    Plan description:
+    <input type="text" id="description_name" style="display: inline-block;">
 </div>
 </body>
 </html>

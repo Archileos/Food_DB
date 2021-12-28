@@ -120,6 +120,32 @@ class RESTfulAPI {
             })
         })
 
+        app.get('/nutrients', function (request, response) {
+            console.log('GET request received at /nutrients');
+            mySqlHandler.listnutrients(function (err, data) {
+                if (err) {
+                    console.log(err)
+                    response.status(500).send()
+                } else {
+                    response.send(data)
+                }
+            })
+        })
+
+        app.post('/uploadPlan', function (request, response) {
+            let plan_name = request.body.plan_name
+            let description = request.body.description
+            let limits_nutrients = request.body.limits_nutrient
+            mySqlHandler.uploadUserPlan(plan_name, description, limits_nutrients, function (err) {
+                if (err) {
+                    console.log(err)
+                    response.sendStatus(500)
+                } else {
+                    response.sendStatus(200)
+                }
+            })
+        })
+
         app.listen(8080, function () {
             console.log('Connected to port 8080');
         })
