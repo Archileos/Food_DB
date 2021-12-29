@@ -29,9 +29,11 @@
         }
         #done{
             border-radius: 5px 20px 5px;
+            cursor: pointer;
         }
         #Advanced_button{
             border-radius: 5px 20px 5px;
+            cursor: pointer;
         }
         ul {
             list-style: none;
@@ -62,14 +64,19 @@
         }
 
         .links {
-            text-align: right;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            cursor: pointer;
+            visibility: hidden;
         }
         .links a{
+
             display: inline-block;
             background: #FFFFFF;
-            color: #AA729D;
-            padding: 2px 8px;
-            border-radius: 5px;
+            color: #276029;
+            padding: 2px 20px;
+            border-radius: 5px 20px 5px;
         }
     </style>
 </head>
@@ -86,10 +93,10 @@
     </ul>
 </div>
 <div style="color: #cccccc">If you finished, please press: <input id="done" type="button" value="Done"></div>
-<div style="align-items: flex-start; color: #cccccc; text-decoration: underline" >Otherwise: <input id="Advanced_button" type="button" value="Advanced"></div>
+<div style="align-items: flex-start; color: #cccccc; text-decoration: underline" >Otherwise: <input id="Advanced_button" onclick="advanced_clicked(); this.onclick = null" type="button" value="Advanced"></div>
 <div  id="div1" style="visibility: hidden">
 </div>
-<div class="links"><a id="backward">&laquo;</a><a id="forward">&raquo;</a></div>
+<div id="links" class="links" ><a id="backward">&laquo;&laquo;</a><a id="forward">&raquo;&raquo;</a></div>
 <div id="dialog">
     Plan name:
     <input type="text" id="plan_name" style="display: inline-block;"> <br>

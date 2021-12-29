@@ -3,7 +3,7 @@ const mysql = require('mysql');
 var con = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "savchenko2k",
+    password: "Alis12345",
     database: "food"
 });
 
@@ -58,15 +58,21 @@ exports.listnutrients = function (callback) {
 exports.uploadUserPlan = function (plan_name, description, limits_nutrients, callback) {
     let sql1 = "insert into food_plans (food_plan_name, food_plan_description, is_user_created) values ?;"
     let values1 = [[plan_name, description, 1]]
-    let sql2 = ""
-    let values2 = [limits_nutrients]
     con.beginTransaction(function (err) {
         if (err) callback(err);
         con.query(sql1, [values1], function (err) {
             if (err) callback(err);
         });
-        con.query(sql2, [values2], function (err) {
-            if (err) callback(err);
-        });
+        for (let i = 0; i < limits_nutrients.length; i++) {
+            let plan_name = limits_nutrients[0];
+            let nut_name = limits_nutrients[1];
+            let amount = limits_nutrients[2];
+            let sql2 = "INSERT INTO food.food_plan_limits_nutrient (food_plan_name, nutrient_id, total_amount)\n" +
+                `select ${plan_name} ,id, ${amount} from nutrient where name=${nut_name};`
+            con.query(sql2, function (err) {
+                if (err) callback(err);
+            });
+        }
+
     })
 }
