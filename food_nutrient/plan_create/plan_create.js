@@ -71,7 +71,7 @@ $(document).ready(function () {
                 $("#div0").children('ul').children('li').each(function () {
                     if ($(this).children()[0].checked) {
                         if ($(this).children()[1].value.length > 0) {
-                            checked.push([$(this)[0].outerText, $(this).children()[1].value])
+                            checked.push([$(this)[0].outerText.replace(/\s/g,''), $(this).children()[1].value])
                         } else {
                             alert("Please fill the limit of " + $(this)[0].outerText)
                             $('#dialog').dialog("close");
@@ -81,7 +81,7 @@ $(document).ready(function () {
                 $("#div1").children('ul2').children('li1').each(function () {
                     if ($(this).children()[0].checked) {
                         if ($(this).children()[1].value.length > 0) {
-                            checked.push([$(this)[0].outerText, $(this).children()[1].value])
+                            checked.push([$(this)[0].outerText.replace(/\s/g,''), $(this).children()[1].value])
                         } else {
                             alert("Please fill the limit of " + $(this)[0].outerText)
                             $('#dialog').dialog("close");
@@ -93,6 +93,7 @@ $(document).ready(function () {
                     description: $('#description_name').val(),
                     limits_nutrient: checked
                 }
+                console.log(checked)
                 $.ajax({
                     url: 'http://localhost:8080/uploadPlan',
                     method: 'post',
