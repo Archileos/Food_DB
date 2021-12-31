@@ -67,18 +67,6 @@ class RESTfulAPI {
             response.sendFile('plan_create.js', {root: __dirname + "/plan_create"});
         })
 
-        app.get('/list', function (request, response) {
-            console.log('GET request received at /list');
-            mySqlHandler.entrylist(function (err, data) {
-                if (err) {
-                    console.log(err)
-                    response.status(500).send()
-                } else {
-                    response.send(data)
-                }
-            })
-        })
-
         app.post('/login', function (request, response) {
             let username = request.body.username
             let password = request.body.password
@@ -120,6 +108,44 @@ class RESTfulAPI {
             })
         })
 
+        app.post('/getTable', function (request, response) {
+            let limits = request.body.limits
+            console.log('GET request received at /getTable');
+            mySqlHandler.entrylist(limits, function (err, data) {
+                if (err) {
+                    console.log(err)
+                    response.status(500).send()
+                } else {
+                    response.send(data)
+                }
+            })
+        })
+
+        app.get('/foodPlans', function (request, response) {
+            console.log('GET request received at /food_plans');
+            mySqlHandler.listplans(function (err, data) {
+                if (err) {
+                    console.log(err)
+                    response.status(500).send()
+                } else {
+                    response.send(data)
+                }
+            })
+        })
+
+        app.post('/getLimits', function (request, response) {
+            console.log('GET request received at /getLimits');
+            let plan_name = request.body.plan_name
+            mySqlHandler.getlimits(plan_name,function (err, data) {
+                if (err) {
+                    console.log(err)
+                    response.status(500).send()
+                } else {
+                    response.send(data)
+                }
+            })
+        })
+
         app.get('/nutrients', function (request, response) {
             console.log('GET request received at /nutrients');
             mySqlHandler.listnutrients(function (err, data) {
@@ -133,6 +159,7 @@ class RESTfulAPI {
         })
 
         app.post('/uploadPlan', function (request, response) {
+            console.log('GET request received at /uploadPlan');
             let plan_name = request.body.plan_name
             let description = request.body.description
             let limits_nutrients = request.body.limits_nutrient

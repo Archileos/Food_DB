@@ -38,8 +38,37 @@ exports.checklogin = function (username, password, callback) {
     });
 }
 
-exports.entrylist = function (callback) {
-    let sql = "select food_name, amount from food, food_nutrient where food_nutrient.fdc_id=food.id and nutrient_id=1003 limit 20;"
+exports.entrylist = function (limits, callback) {
+    let sql = "select food.id, food.food_name, food.food_description from food_nutrient"
+    let where = " where "
+    let dict = {0: 'food_nutrient'}
+    for (let i = 1; i < limits.length; i++) {
+        sql += ` join food_nutrient as f${i}`
+        where += `food_nutrient.fdc_id=f${i}.fdc_id and `
+        dict[i] = `f${i}`
+    }
+    sql += " ,food"
+    sql += where
+    for (let i = 0; i < limits.length; i++) {
+        sql += ` ${dict[i]}.nutrient_id = ${limits[i].nutrient_id} and ${dict[i]}.amount < ${limits[i].total_amount} and `
+    }
+    sql += " food.id=food_nutrient.fdc_id group by food.food_name limit 20;"
+    con.query(sql, function (err, result) {
+        if (err) callback(err, null);
+        else callback(null, result);
+    });
+}
+
+exports.listplans = function (callback) {
+    let sql = "select food_plan_name, food_plan_description from food_plans order by is_user_created;"
+    con.query(sql, function (err, result) {
+        if (err) callback(err, null);
+        else callback(null, result);
+    });
+}
+
+exports.getlimits = function (plan_name, callback) {
+    let sql = `select nutrient_id, total_amount from food_plan_limits_nutrient where food_plan_name=\'${plan_name}\';`
     con.query(sql, function (err, result) {
         if (err) callback(err, null);
         else callback(null, result);
