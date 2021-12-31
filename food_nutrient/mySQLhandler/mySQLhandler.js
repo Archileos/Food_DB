@@ -3,7 +3,7 @@ const mysql = require('mysql');
 var con = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "Alis12345",
+    password: "savchenko2k",
     database: "food"
 });
 
@@ -39,7 +39,7 @@ exports.checklogin = function (username, password, callback) {
 }
 
 exports.entrylist = function (limits, callback) {
-    let sql = "select food.id, food.food_name, food.food_description from food_nutrient"
+    let sql = "select food.food_name from food_nutrient"
     let where = " where "
     let dict = {0: 'food_nutrient'}
     for (let i = 1; i < limits.length; i++) {
@@ -52,7 +52,7 @@ exports.entrylist = function (limits, callback) {
     for (let i = 0; i < limits.length; i++) {
         sql += ` ${dict[i]}.nutrient_id = ${limits[i].nutrient_id} and ${dict[i]}.amount < ${limits[i].total_amount} and `
     }
-    sql += " food.id=food_nutrient.fdc_id group by food.food_name limit 20;"
+    sql += " food.id=food_nutrient.fdc_id limit 20;"
     con.query(sql, function (err, result) {
         if (err) callback(err, null);
         else callback(null, result);

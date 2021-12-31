@@ -35,14 +35,15 @@ $(document).ready(function () {
                 if (data.length > 0) {
                     for (let index = 0; index < data.length; index++) {
                         const newRow = $("<tr>");
-                        newRow.append('<td class="tooltip"> ' + data[index].food_name + '<span class="tooltiptext">' + 'TEXT' + '</span>'+ '</td>');
+                        newRow.append('<td class="tooltip"><p class="text">' + data[index].food_name + '</p><span class="tooltiptext">' + 'TEXT' + '</span>'+ '</td>');
                         $("#table1 tbody").append(newRow);
-                        newRow.click(function () {
-                            let value = ""
-                            $(this).children('td').each(function () {
-                                value += $(this).html() + " "
-                            })
-                            alert(value);
+                        newRow.on("click", function () {
+                            const cloneRow = $("<tr>");
+                            cloneRow.append('<td class="tooltip"> ' + $(this).find(' .text').text() + '</td>');
+                            $("#table2 tbody").append(cloneRow)
+                            cloneRow.on("click", function () {
+                                $(this).remove()
+                            });
                         });
                     }
                 }

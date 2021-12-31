@@ -1,1 +1,0 @@
-* Adjust CSV and load it correctly
