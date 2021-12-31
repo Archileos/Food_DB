@@ -35,7 +35,7 @@ $(document).ready(function () {
                 if (data.length > 0) {
                     for (let index = 0; index < data.length; index++) {
                         const newRow = $("<tr>");
-                        newRow.append('<td> ' + data[index].food_name + '</td>');
+                        newRow.append('<td class="tooltip"> ' + data[index].food_name + '<span class="tooltiptext">' + 'TEXT' + '</span>'+ '</td>');
                         $("#table1 tbody").append(newRow);
                         newRow.click(function () {
                             let value = ""
@@ -57,6 +57,7 @@ $(document).ready(function () {
         $("#table1").css('visibility', 'visible')
         $("#table2").css('visibility', 'visible')
         $("#name_diet").css('visibility', 'visible')
+        $("#complete").css('visibility', 'visible')
         let data = {plan_name: $('#format').find(":selected").val()}
         console.log(data)
         $.ajax({

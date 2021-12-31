@@ -3,7 +3,7 @@ const mysql = require('mysql');
 var con = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "savchenko2k",
+    password: "Alis12345",
     database: "food"
 });
 
@@ -15,7 +15,7 @@ exports.connect = function () {
 }
 
 exports.adduser = function (username, password, callback) {
-    let sql = "insert into users (username, password) values (\'{username}\',\'{password}\');"
+    let sql = `insert into users (username, password) values (\'${username}\',\'${password}\');`
     con.query(sql, function (err) {
         if (err) callback(err, null);
         callback(null);
