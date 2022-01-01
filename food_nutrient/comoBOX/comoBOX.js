@@ -39,7 +39,7 @@ $(document).ready(function () {
                         $("#table1 tbody").append(newRow);
                         newRow.on("click", function () {
                             const cloneRow = $("<tr>");
-                            cloneRow.append('<td class="tooltip"> ' + $(this).find(' .text').text() + '</td>');
+                            cloneRow.append('<td class="tooltip"> ' + $(this).find(' .text').text() +'<span class="tooltiptext2">' + 'TEXT' + '</span>'+ '</td>');
                             $("#table2 tbody").append(cloneRow)
                             cloneRow.on("click", function () {
                                 $(this).remove()
@@ -59,6 +59,7 @@ $(document).ready(function () {
         $("#table2").css('visibility', 'visible')
         $("#name_diet").css('visibility', 'visible')
         $("#complete").css('visibility', 'visible')
+        $("#p11").css('visibility', 'visible')
         let data = {plan_name: $('#format').find(":selected").val()}
         console.log(data)
         $.ajax({
