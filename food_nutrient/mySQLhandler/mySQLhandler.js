@@ -3,7 +3,7 @@ const mysql = require('mysql');
 var con = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "Alis12345",
+    password: "savchenko2k",
     database: "food"
 });
 
@@ -38,7 +38,7 @@ exports.checklogin = function (username, password, callback) {
     });
 }
 
-exports.entrylist = function (limits, callback) {
+exports.entrylist = async function (limits, callback) {
     let sql = "select food.food_name from food_nutrient"
     let where = " where "
     let dict = {0: 'food_nutrient'}
@@ -67,6 +67,14 @@ exports.listplans = function (callback) {
     });
 }
 
+exports.getnutoffood = function (food_name, callback) {
+    let sql = `select nutrient.id, nutrient.name, food_nutrient.amount, nutrient.unit_name from food_nutrient, food, nutrient where food_nutrient.fdc_id=food.id and nutrient_id=nutrient.id and food_name=\"${food_name}\";`
+    con.query(sql, function (err, result) {
+        if (err) callback(err, null);
+        else callback(null, result)
+    });
+}
+
 exports.getlimits = function (plan_name, callback) {
     let sql = `select nutrient_id, total_amount from food_plan_limits_nutrient where food_plan_name=\'${plan_name}\';`
     con.query(sql, function (err, result) {
@@ -76,7 +84,7 @@ exports.getlimits = function (plan_name, callback) {
 }
 
 exports.listnutrients = function (callback) {
-    let sql = "select name from nutrient where id<>1003 and id<>1004 and id<>1005 and id<>1008"
+    let sql = "select name, unit_name from nutrient where id<>1003 and id<>1004 and id<>1005 and id<>1008"
     con.query(sql, function (err, result) {
         if (err) callback(err, null);
         else callback(null, result);

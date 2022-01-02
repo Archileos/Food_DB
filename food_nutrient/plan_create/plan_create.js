@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
-    var advanced_clicked = false;
-    var loaded = false;
+    let advanced_clicked = false;
+    let loaded = false;
 
     $('#Advanced_button').on("click", function () {
         if(!loaded) {
@@ -18,10 +18,10 @@ $(document).ready(function () {
                             newUl.hide()
                             for (let jndex = 0; jndex < 32 && (index * 32 + jndex) < data.length; jndex++) {
                                 const newList = $("<li1>");
-                                newList.append('<input type="checkbox" name="myCheckbox"> ');
+                                newList.append('<input type="checkbox" name="myCheckbox">');
                                 let place = jndex + index * 32;
-                                console.log(place)
-                                newList.append(data[place].name);
+                                let food_name = "<p class=\"text\" style=\"display:inline\">" + data[place].name + "</p>";
+                                newList.append(food_name + " " + data[place].unit_name);
                                 newList.append(' <input type="number" style="display: inline-block; width:60px">');
                                 newUl.append(newList);
                             }
@@ -68,45 +68,49 @@ $(document).ready(function () {
         buttons: {
             "Done": function () {
                 let checked = []
+                let send = true
                 $("#div0").children('ul').children('li').each(function () {
                     if ($(this).children()[0].checked) {
-                        if ($(this).children()[1].value.length > 0) {
-                            checked.push([$(this)[0].outerText.replace(/\s/g,''), $(this).children()[1].value])
+                        if ($(this).children()[2].value.length > 0) {
+                            checked.push([$(this).find(".text").text(), $(this).children()[2].value])
                         } else {
-                            alert("Please fill the limit of " + $(this)[0].outerText)
+                            alert("Please fill the limit of " + $(this).find(".text").text())
                             $('#dialog').dialog("close");
+                            send = false;
                         }
                     }
                 })
                 $("#div1").children('ul2').children('li1').each(function () {
                     if ($(this).children()[0].checked) {
-                        if ($(this).children()[1].value.length > 0) {
-                            checked.push([$(this)[0].outerText.replace(/\s/g,''), $(this).children()[1].value])
+                        if ($(this).children()[2].value.length > 0) {
+                            checked.push([$(this).find(".text").text(), $(this).children()[2].value])
                         } else {
-                            alert("Please fill the limit of " + $(this)[0].outerText)
+                            alert("Please fill the limit of " + $(this).find(".text").text())
                             $('#dialog').dialog("close");
+                            send = false;
                         }
                     }
                 })
-                let data = {
-                    plan_name: $('#plan_name').val(),
-                    description: $('#description_name').val(),
-                    limits_nutrient: checked
-                }
-                console.log(checked)
-                $.ajax({
-                    url: 'http://localhost:8080/uploadPlan',
-                    method: 'post',
-                    contentType: "application/json",
-                    data: JSON.stringify(data),
-                    success: function () {
-                        window.location.href = "http://localhost:8080/comoBOX.html";
-                    },
-                    error: function () {
-                        alert("Failed to create your plan, please try again")
+                if (send) {
+                    let data = {
+                        plan_name: $('#plan_name').val(),
+                        description: $('#description_name').val(),
+                        limits_nutrient: checked
                     }
-                });
-                $(this).dialog('close');
+                    $.ajax({
+                        url: 'http://localhost:8080/uploadPlan',
+                        method: 'post',
+                        contentType: "application/json",
+                        data: JSON.stringify(data),
+                        success: function () {
+                            window.location.href = "http://localhost:8080/comoBOX.html";
+                        },
+                        error: function () {
+                            alert("Failed to create your plan, please try again")
+                        }
+                    });
+                    $(this).dialog('close');
+                }
             }
         }
     })
