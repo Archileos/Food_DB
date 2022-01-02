@@ -108,31 +108,31 @@ class RESTfulAPI {
             })
         })
 
+        app.post('/getnutoffood', function (request, response) {
+            let food_name = request.body.food_name
+            console.log('GET request received at /getnutoffood');
+            mySqlHandler.getnutoffood(food_name, function (err, data) {
+                if (err) {
+                    console.log(err)
+                    response.sendStatus(500)
+                } else {
+                    response.send(data)
+                }
+            })
+        })
+
         app.post('/getTable', function (request, response) {
             let limits = request.body.limits;
             console.log('GET request received at /getTable');
             mySqlHandler.entrylist(limits, function (err, data) {
-                if (err) {
-                    console.log(err);
-                    response.status(500).send();
-                } else {
-                    let dict = {};
-                    for (let i = 0; i < data.length; i++) {
-                        let food_name = data[i].food_name;
-                        mySqlHandler.getnutoffood(food_name, function (err, result) {
-                            if (err) {
-                                console.log(err);
-                                response.status(500).send()
-                            } else {
-                                dict[food_name] = result
-                                if(Object.keys(dict).length === data.length) {
-                                    response.send(dict);
-                                }
-                            }
-                        })
+                    if (err) {
+                        console.log(err);
+                        response.status(500).send();
+                    } else {
+                        response.send(data)
                     }
                 }
-            })
+            )
         })
 
         app.get('/foodPlans', function (request, response) {

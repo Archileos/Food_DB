@@ -3,7 +3,7 @@ const mysql = require('mysql');
 var con = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "savchenko2k",
+    password: "Alis12345",
     database: "food"
 });
 
@@ -52,7 +52,7 @@ exports.entrylist = async function (limits, callback) {
     for (let i = 0; i < limits.length; i++) {
         sql += ` ${dict[i]}.nutrient_id = ${limits[i].nutrient_id} and ${dict[i]}.amount < ${limits[i].total_amount} and `
     }
-    sql += " food.id=food_nutrient.fdc_id limit 20;"
+    sql += " food.id=food_nutrient.fdc_id limit 500;"
     con.query(sql, function (err, result) {
         if (err) callback(err, null);
         else callback(null, result);
@@ -99,6 +99,9 @@ exports.uploadUserPlan = function (plan_name, description, limits_nutrients, cal
     for (let i = 0; i < limits_nutrients.length; i++) {
         let nut_name = limits_nutrients[i][0];
         let amount = limits_nutrients[i][1];
+        if(amount<1){
+            amount=0.01;
+        }
         let sql2 = "INSERT INTO food.food_plan_limits_nutrient (food_plan_name, nutrient_id, total_amount)\n" +
             `select \'${plan_name}\' ,id, ${amount} from nutrient where name=\'${nut_name}\';`
         con.query(sql2, function (err) {
