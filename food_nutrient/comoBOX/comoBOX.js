@@ -1,6 +1,7 @@
 $(document).ready(function () {
 
     let selected_foods = {};
+    let curr_limits = {};
 
     $.ajax({
         url: 'http://localhost:8080/foodPlans',
@@ -24,7 +25,7 @@ $(document).ready(function () {
 
     function verify_limits(limits) {
         for (let i = 0; i < limits.length; i++) {
-            if (limits[i].total_amount < 0)
+            if (limits[i].total_amount < 0.01)
                 return false;
         }
         return true;
@@ -61,66 +62,107 @@ $(document).ready(function () {
     }
 
     function create_table(limits) {
-        $("#table1").find('tbody').detach()
-        $('#table1').append($('<tbody>'));
+        let table1 = $("#table1");
+        let forward = $("#forward");
+        forward.off("click");
+        let backward = $("#backward");
+        backward.off("click");
         if (verify_limits(limits)) {
-            console.log(limits)
-            let data = {limits: limits}
+            let data = {'limits': limits};
             $.ajax({
                 url: 'http://localhost:8080/getTable',
                 contentType: "application/json",
                 method: 'post',
                 data: JSON.stringify(data),
                 success: function (data) {
-                    if (Object.keys(data).length > 0) {
-                        for (let index = 0; index < Object.keys(data).length; index++) {
-                            let food = Object.keys(data)[index];
-                            const newRow = $("<tr>");
-                            let food_name = '<p class="text">' + food + '</p>';
-                            let tooltip = '<span class="tooltiptext">' + write_elms(data[food]) + '</span>';
-                            newRow.append('<td class="tooltip">' + food_name + tooltip + '</td>');
-                            $("#table1 tbody").append(newRow);
-                            newRow.on("click", function () {
-                                let food = $(this).find(' .text').text();
-                                let new_limits = reduce_limits(limits, data[food]);
-                                if (selected_foods.hasOwnProperty(food) && selected_foods[food] > 0) {
-                                    selected_foods[food]++;
-                                    let amount = selected_foods[food] * 100;
-                                    $("#table2 tbody tr").each(function () {
-                                        if ($(this).find(".text").text() === food) {
-                                            $(this).find(".amount").text(amount);
-                                            return false;
+                    if (data.length > 0) {
+                        let num_tbody = Math.ceil(data.length / 20)
+                        table1.find('tbody').detach();
+                        for (let i = 0; i < num_tbody; i++) {
+                            const newTbody = $("<tbody id=\'tbody" + i + "\'>");
+                            table1.append(newTbody)
+                            newTbody.hide();
+                            for (let index = 0; index < 20; index++) {
+                                let food = data[index + i * 20].food_name;
+                                const newRow = $("<tr>");
+                                let food_name = '<p class="text">' + food + '</p>';
+                                newRow.append('<td>' + food_name + '</td>');
+                                $("#table1 #tbody" + i).append(newRow);
+                                newRow.on("click", function () {
+                                    let food = $(this).find(' .text').text();
+                                    let data = {'food_name': food}
+                                    $.ajax({
+                                        url: 'http://localhost:8080/getnutoffood',
+                                        contentType: "application/json",
+                                        method: 'post',
+                                        data: JSON.stringify(data),
+                                        success: function (data) {
+                                            curr_limits = reduce_limits(limits, data);
+                                            if (selected_foods.hasOwnProperty(food) && selected_foods[food] > 0) {
+                                                selected_foods[food]++;
+                                                let amount = selected_foods[food] * 100;
+                                                $("#table2 tbody tr").each(function () {
+                                                    if ($(this).find(".text").text() === food) {
+                                                        $(this).find(".amount").text(amount);
+                                                        return false;
+                                                    }
+                                                })
+                                            } else {
+                                                const cloneRow = $("<tr>");
+                                                selected_foods[food] = 1;
+                                                let food_name = '<p class="text">' + food + '</p>';
+                                                let tooltip = '<span class="tooltiptext2">' + write_elms(data) + '</span>';
+                                                cloneRow.append('<td class="tooltip"> ' + food_name + tooltip + '</td>');
+                                                cloneRow.append('<td class="amount">' + 100 + '</td>');
+                                                $("#table2 tbody").append(cloneRow);
+                                                cloneRow.on("click", function () {
+                                                    let food = $(this).find(' .text').text();
+                                                    if (selected_foods[food] === 1) {
+                                                        $(this).remove();
+                                                    } else {
+                                                        $(this).find(' .amount').text(selected_foods[food] * 100 - 100);
+                                                    }
+                                                    selected_foods[food] -= 1;
+                                                    curr_limits = increase_limits(curr_limits, data);
+                                                    create_table(curr_limits);
+                                                });
+                                            }
+                                            create_table(curr_limits);
+                                        },
+                                        error: function () {
+                                            alert('failed');
                                         }
                                     })
-                                } else {
-                                    const cloneRow = $("<tr>");
-                                    selected_foods[food] = 1;
-                                    let food_name = '<p class="text">' + food + '</p>';
-                                    let tooltip = '<span class="tooltiptext2">' + write_elms(data[food]) + '</span>';
-                                    cloneRow.append('<td class="tooltip"> ' + food_name + tooltip + '</td>');
-                                    cloneRow.append('<td class="amount">' + 100 + '</td>');
-                                    $("#table2 tbody").append(cloneRow);
-                                    cloneRow.on("click", function () {
-                                        let food = $(this).find(' .text').text();
-                                        if (selected_foods[food] === 1) {
-                                            $(this).remove();
-                                        } else {
-                                            $(this).find(' .amount').text(selected_foods[food] * 100 - 100);
-                                        }
-                                        selected_foods[food] -= 1;
-                                        new_limits = increase_limits(new_limits, data[food]);
-                                        create_table(new_limits);
-                                    });
-                                }
-                                create_table(new_limits)
-                            });
+
+                                });
+                            }
                         }
+                        let index_on = 0;
+                        $("#table1 #tbody" + index_on).show();
+                        forward.click(function () {
+                            if (index_on < num_tbody - 1) {
+                                console.log(index_on);
+                                $("#table1 #tbody" + index_on).hide();
+                                index_on++;
+                                $("#table1 #tbody" + index_on).show();
+                            }
+                        });
+                        backward.click(function () {
+                            if (index_on > 0) {
+                                $("#table1 #tbody" + index_on).hide();
+                                index_on--;
+                                $("#table1 #tbody" + index_on).show();
+                            }
+                        });
                     }
                 },
                 error: function () {
-                    alert('failed')
+                    alert('failed');
                 }
             });
+        } else {
+            table1.find('tbody').detach();
+            table1.append($('<tbody>'));
         }
     }
 
@@ -141,7 +183,8 @@ $(document).ready(function () {
             data: JSON.stringify(data),
             success: function (data) {
                 if (data.length > 0) {
-                    create_table(data)
+                    curr_limits = data;
+                    create_table(curr_limits);
                 }
             },
             error: function () {
@@ -149,6 +192,27 @@ $(document).ready(function () {
             }
         })
     })
+
+    // $("#complete").on('click', function () {
+    // let table2 = $("#table2");
+    // table2.find('tbody').detach();
+    // table2.append($('<tbody>'));
+    // let data = {'limits': curr_limits};
+    // $.ajax({
+    //     url: 'http://localhost:8080/complete',
+    //     contentType: "application/json",
+    //     method: 'post',
+    //     data: JSON.stringify(data),
+    //     success: function (data) {
+    //         if (data.length > 0) {
+    //             console.log(data);
+    //         }
+    //     },
+    //     error: function () {
+    //         alert('failed?')
+    //     }
+    // })
+    // })
 
     $('#dialog').dialog({
         modal: true,
@@ -169,5 +233,4 @@ $(document).ready(function () {
     $('#create_button').on('click', function () {
         window.location.href = "http://localhost:8080/plan_create.html";
     })
-})
-;
+});
