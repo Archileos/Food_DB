@@ -189,6 +189,7 @@ $(document).ready(function () {
         $("#name_diet").css('visibility', 'visible')
         $("#complete").css('visibility', 'visible')
         $("#p11").css('visibility', 'visible')
+        $("#p12").css('visibility', 'visible')
         table2.find('tbody').detach()
         table2.append($('<tbody>'));
         let data = {plan_name: $('#format').find(":selected").val()}
