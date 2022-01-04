@@ -121,18 +121,19 @@ class RESTfulAPI {
             })
         })
 
-        // app.post('/complete', function (request, response) {
-        //     console.log('GET request received at /complete');
-        //     let limits = request.body.limits
-        //     mySqlHandler.fill(limits, function (err, data) {
-        //         if (err) {
-        //             console.log(err)
-        //             response.status(500).send()
-        //         } else {
-        //             response.send(JSON.stringify(data))
-        //         }
-        //     })
-        // })
+        app.post('/complete', function (request, response) {
+            console.log('GET request received at /complete');
+            let limits = request.body.limits;
+            let looking_for = request.body.max_nutrient;
+            mySqlHandler.selectMax(limits, looking_for, function (err, data) {
+                if (err) {
+                    console.log(err)
+                    response.status(500).send()
+                } else {
+                    response.send(data)
+                }
+            })
+        })
 
         app.post('/getTable', function (request, response) {
             let limits = request.body.limits;

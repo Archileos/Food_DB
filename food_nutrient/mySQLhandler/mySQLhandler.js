@@ -38,8 +38,7 @@ exports.checklogin = function (username, password, callback) {
     });
 }
 
-exports.entrylist = function (limits, callback) {
-    let sql = "select food.food_name from food_nutrient as f0"
+function build_query(sql, limits) {
     let where = " where "
     let dict = {0: 'f0'}
     for (let i = 1; i < limits.length; i++) {
@@ -52,6 +51,12 @@ exports.entrylist = function (limits, callback) {
     for (let i = 0; i < limits.length; i++) {
         sql += `${dict[i]}.nutrient_id = ${limits[i].nutrient_id} and ${dict[i]}.amount < ${limits[i].total_amount} and `
     }
+    return sql;
+}
+
+exports.entrylist = function (limits, callback) {
+    let sql = "select food.food_name from food_nutrient as f0"
+    sql = build_query(sql, limits);
     sql += "food.id=f0.fdc_id limit 100;"
     con.query(sql, function (err, result) {
         if (err) callback(err, null);
@@ -75,65 +80,16 @@ exports.getnutoffood = function (food_name, callback) {
     });
 }
 
-// function selectMax(limits, looking_for, callback) {
-//     let sql = `select food_name from food, food_nutrient where food.id=fdc_id and nutrient_id = ${limits[looking_for].nutrient_id} and amount = `
-//     sql += `(select MAX(f${looking_for}.amount) from food_nutrient as f0`
-//     let where = " where "
-//     let dict = {0: 'f0'}
-//     for (let i = 1; i < limits.length; i++) {
-//         sql += ` join food_nutrient as f${i}`
-//         where += `f0.fdc_id=f${i}.fdc_id and `
-//         dict[i] = `f${i}`
-//     }
-//     sql += " ,food"
-//     sql += where
-//     for (let i = 0; i < limits.length; i++) {
-//         sql += `${dict[i]}.nutrient_id = ${limits[i].nutrient_id} and ${dict[i]}.amount < ${limits[i].total_amount} and `
-//     }
-//     sql += "food.id=f0.fdc_id) limit 1;"
-//     con.query(sql, function (err, result) {
-//         if (err) callback(err, null);
-//         else callback(null, result);
-//     });
-// }
-
-// exports.fill = function (limits, callback) {
-//     let food_list = [];
-//     let looking_for = 0;
-//     for (let i = 0; i < limits.length; i++) {
-//         if (limits[i].total_amount < 0.01) {
-//             callback(null, food_list);
-//             return;
-//         }
-//         for (let j = 0; j < limits.length; j++) {
-//             if (limits[j].total_amount > limits[looking_for].total_amount) {
-//                 looking_for = j;
-//             }
-//         }
-//         selectMax(limits, looking_for, function (err, result) {
-//             console.log(result);
-//             if (err) callback(err, null);
-//             else{
-//                 food_list.push(result.food_name);
-//                 getnutoffood(food_list[food_list.length - 1], function (err, result) {
-//                     console.log(result);
-//                     if (err) callback(err, null);
-//                     else{
-//                         for (let j = 0; j < limits.length; j++) {
-//                             for (let i = 0; i < result.length; i++) {
-//                                 if (limits[j].nutrient_id === result[i].id) {
-//                                     limits[j].total_amount -= result[i].amount;
-//                                 }
-//                             }
-//                         }
-//                     }
-//                 })
-//             }
-//         })
-//         console.log(food_list)
-//         console.log(limits)
-//     }
-// }
+exports.selectMax = function (limits, looking_for, callback) {
+    let sql = `select food_name from food, food_nutrient where food.id=fdc_id and nutrient_id = ${limits[looking_for].nutrient_id} and amount = `
+    sql += `(select MAX(f${looking_for}.amount) from food_nutrient as f0 `
+    sql = build_query(sql, limits);
+    sql += "food.id=f0.fdc_id) limit 1;"
+    con.query(sql, function (err, result) {
+        if (err) callback(err, null);
+        else callback(null, result);
+    });
+}
 
 exports.getlimits = function (plan_name, callback) {
     let sql = `select nutrient_id, total_amount from food_plan_limits_nutrient where food_plan_name=\'${plan_name}\';`

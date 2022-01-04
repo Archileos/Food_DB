@@ -31,6 +31,18 @@ $(document).ready(function () {
         return true;
     }
 
+    function find_max_nutrient(limits) {
+        let max = 0;
+        let looking_for = 0;
+        for (let i = 0; i < limits.length; i++) {
+            if (limits[i].total_amount > max) {
+                max = limits[i].total_amount;
+                looking_for = i;
+            }
+        }
+        return looking_for;
+    }
+
     function reduce_limits(limits, nutrient_data) {
         for (let j = 0; j < limits.length; j++) {
             for (let i = 0; i < nutrient_data.length; i++) {
@@ -61,12 +73,59 @@ $(document).ready(function () {
         return result;
     }
 
+    function select_food(food, limits) {
+        let data = {'food_name': food}
+        $.ajax({
+            url: 'http://localhost:8080/getnutoffood',
+            contentType: "application/json",
+            method: 'post',
+            data: JSON.stringify(data),
+            success: function (data) {
+                curr_limits = reduce_limits(limits, data);
+                if (selected_foods.hasOwnProperty(food) && selected_foods[food] > 0) {
+                    selected_foods[food]++;
+                    let amount = selected_foods[food] * 100;
+                    $("#table2 tbody tr").each(function () {
+                        if ($(this).find(".text").text() === food) {
+                            $(this).find(".amount").text(amount);
+                            return false;
+                        }
+                    })
+                } else {
+                    const cloneRow = $("<tr>");
+                    selected_foods[food] = 1;
+                    let food_name = '<p class="text">' + food + '</p>';
+                    let tooltip = '<span class="tooltiptext2">' + write_elms(data) + '</span>';
+                    cloneRow.append('<td class="tooltip"> ' + food_name + tooltip + '</td>');
+                    cloneRow.append('<td class="amount">' + 100 + '</td>');
+                    $("#table2 tbody").append(cloneRow);
+                    cloneRow.on("click", function () {
+                        let food = $(this).find(' .text').text();
+                        if (selected_foods[food] === 1) {
+                            $(this).remove();
+                        } else {
+                            $(this).find(' .amount').text(selected_foods[food] * 100 - 100);
+                        }
+                        selected_foods[food] -= 1;
+                        curr_limits = increase_limits(curr_limits, data);
+                        create_table(curr_limits);
+                    });
+                }
+                create_table(curr_limits);
+            },
+            error: function () {
+                alert('failed');
+            }
+        })
+    }
+
     function create_table(limits) {
         let table1 = $("#table1");
         let forward = $("#forward");
         forward.off("click");
         let backward = $("#backward");
         backward.off("click");
+        console.log(limits);
         if (verify_limits(limits)) {
             let data = {'limits': limits};
             $.ajax({
@@ -90,50 +149,7 @@ $(document).ready(function () {
                                 $("#table1 #tbody" + i).append(newRow);
                                 newRow.on("click", function () {
                                     let food = $(this).find(' .text').text();
-                                    let data = {'food_name': food}
-                                    $.ajax({
-                                        url: 'http://localhost:8080/getnutoffood',
-                                        contentType: "application/json",
-                                        method: 'post',
-                                        data: JSON.stringify(data),
-                                        success: function (data) {
-                                            curr_limits = reduce_limits(limits, data);
-                                            if (selected_foods.hasOwnProperty(food) && selected_foods[food] > 0) {
-                                                selected_foods[food]++;
-                                                let amount = selected_foods[food] * 100;
-                                                $("#table2 tbody tr").each(function () {
-                                                    if ($(this).find(".text").text() === food) {
-                                                        $(this).find(".amount").text(amount);
-                                                        return false;
-                                                    }
-                                                })
-                                            } else {
-                                                const cloneRow = $("<tr>");
-                                                selected_foods[food] = 1;
-                                                let food_name = '<p class="text">' + food + '</p>';
-                                                let tooltip = '<span class="tooltiptext2">' + write_elms(data) + '</span>';
-                                                cloneRow.append('<td class="tooltip"> ' + food_name + tooltip + '</td>');
-                                                cloneRow.append('<td class="amount">' + 100 + '</td>');
-                                                $("#table2 tbody").append(cloneRow);
-                                                cloneRow.on("click", function () {
-                                                    let food = $(this).find(' .text').text();
-                                                    if (selected_foods[food] === 1) {
-                                                        $(this).remove();
-                                                    } else {
-                                                        $(this).find(' .amount').text(selected_foods[food] * 100 - 100);
-                                                    }
-                                                    selected_foods[food] -= 1;
-                                                    curr_limits = increase_limits(curr_limits, data);
-                                                    create_table(curr_limits);
-                                                });
-                                            }
-                                            create_table(curr_limits);
-                                        },
-                                        error: function () {
-                                            alert('failed');
-                                        }
-                                    })
-
+                                    select_food(food, curr_limits);
                                 });
                             }
                         }
@@ -193,26 +209,27 @@ $(document).ready(function () {
         })
     })
 
-    // $("#complete").on('click', function () {
-    // let table2 = $("#table2");
-    // table2.find('tbody').detach();
-    // table2.append($('<tbody>'));
-    // let data = {'limits': curr_limits};
-    // $.ajax({
-    //     url: 'http://localhost:8080/complete',
-    //     contentType: "application/json",
-    //     method: 'post',
-    //     data: JSON.stringify(data),
-    //     success: function (data) {
-    //         if (data.length > 0) {
-    //             console.log(data);
-    //         }
-    //     },
-    //     error: function () {
-    //         alert('failed?')
-    //     }
-    // })
-    // })
+    $("#complete").on('click', function () {
+        if (verify_limits(curr_limits)) {
+            let data = {'limits': curr_limits, 'max_nutrient': find_max_nutrient(curr_limits)};
+            $.ajax({
+                url: 'http://localhost:8080/complete',
+                contentType: "application/json",
+                method: 'post',
+                data: JSON.stringify(data),
+                success: function (data) {
+                    if (data.length > 0) {
+                        console.log(data);
+                        let food = data[0].food_name;
+                        select_food(food, curr_limits);
+                    }
+                },
+                error: function () {
+                    alert('failed')
+                }
+            })
+        }
+    })
 
     $('#dialog').dialog({
         modal: true,

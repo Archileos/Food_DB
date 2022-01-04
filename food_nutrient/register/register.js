@@ -17,5 +17,8 @@ $(document).ready(function () {
                 }
             })
         }
+        else {
+            $('#login-error-msg-wrong-first').css('opacity', '1')
+        }
     })
 });
