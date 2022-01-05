@@ -6,7 +6,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Food App</title>
-    <link rel="stylesheet" href="diets.css">
     <style>
         body {
             height: 100%;
@@ -118,7 +117,14 @@
             visibility: visible;
             opacity: 1;
         }
-
+        div#loading-overlay {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
         body#tinymce {
             background: #FFFFFF
         }
@@ -225,44 +231,6 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td>cell1_1</td><td>cell2_1</td></tr>
-    <tr>
-        <td>cell1_2</td><td>cell2_2</td></tr>
-    <tr>
-        <td>cell1_3</td><td>cell2_3</td></tr>
-    <tr>
-        <td>cell1_4</td><td>cell2_4</td></tr>
-    <tr>
-        <td>cell1_5</td><td>cell2_5</td></tr>
-    <tr>
-        <td>cell1_6</td><td>cell2_6</td></tr>
-    <tr>
-        <td>cell1_7</td><td>cell2_7</td></tr>
-    <tr>
-        <td>cell1_2</td><td>cell2_2</td></tr>
-    <tr>
-        <td>cell1_3</td><td>cell2_3</td></tr>
-    <tr>
-        <td>cell1_4</td><td>cell2_4</td></tr>
-    <tr>
-        <td>cell1_5</td><td>cell2_5</td></tr>
-    <tr>
-        <td>cell1_6</td><td>cell2_6</td></tr>
-    <tr>
-        <td>cell1_7</td><td>cell2_7</td></tr>
-    <tr>
-        <td>cell1_2</td><td>cell2_2</td></tr>
-    <tr>
-        <td>cell1_3</td><td>cell2_3</td></tr>
-    <tr>
-        <td>cell1_4</td><td>cell2_4</td></tr>
-    <tr>
-        <td>cell1_5</td><td>cell2_5</td></tr>
-    <tr>
-        <td>cell1_6</td><td>cell2_6</td></tr>
-    <tr>
-        <td>cell1_7</td><td>cell2_7</td></tr>
     </tbody>
     </tr>
 </table>
@@ -279,6 +247,8 @@
 <br>
 <input id="create_diet_button" type="button" value="Create diet">
 <input id="update_diet_button" type="button" value="Update diet">
-
+<p id="stats" style="border-color:red">
+    Content goes here
+</p>
 </body>
 </html>

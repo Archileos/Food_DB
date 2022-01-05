@@ -1,4 +1,13 @@
 $(document).ready(function () {
+
+    $(document).ajaxStart(function () {
+        $(document.body).css({'cursor': 'wait'});
+        $(document.body).prepend($("<div id=\"loading-overlay\">"));
+    }).ajaxStop(function () {
+        $(document.body).css({'cursor': 'default'});
+        $(document.body).find("#loading-overlay").remove();
+    });
+
     $('#register-form-submit').on('click', function (event) {
         event.preventDefault()
         let password = $('#password-field').val()
@@ -18,8 +27,7 @@ $(document).ready(function () {
                     $('#login-error-msg-wrong-first2').css('opacity', '1')
                 }
             })
-        }
-        else {
+        } else {
             $('#login-error-msg-wrong-first').css('opacity', '1')
         }
     })

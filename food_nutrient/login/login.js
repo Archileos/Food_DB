@@ -1,5 +1,13 @@
 $(document).ready(function () {
 
+    $(document).ajaxStart(function () {
+        $(document.body).css({'cursor': 'wait'});
+        $(document.body).prepend($("<div id=\"loading-overlay\">"));
+    }).ajaxStop(function () {
+        $(document.body).css({'cursor': 'default'});
+        $(document.body).find("#loading-overlay").remove();
+    });
+
     $('#login-form-submit').on('click', function (event) {
         event.preventDefault()
         let username = $('#username-field').val()

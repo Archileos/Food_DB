@@ -68,6 +68,7 @@ class RESTfulAPI {
         })
 
         app.post('/login', function (request, response) {
+            console.log('POST request received at /login');
             let username = request.body.username
             let password = request.body.password
             mySqlHandler.checklogin(username, password, function (err, data) {
@@ -85,6 +86,7 @@ class RESTfulAPI {
         })
 
         app.post('/register', function (request, response) {
+            console.log('POST request received at /register');
             let username = request.body.username
             let password = request.body.password
             mySqlHandler.checkregister(username, function (err, data) {
@@ -110,7 +112,7 @@ class RESTfulAPI {
 
         app.post('/getDiets', function (request, response) {
             let username = request.body.user_name;
-            console.log('GET request received at /getDiets');
+            console.log('POST request received at /getDiets');
             mySqlHandler.getdiets(username, function (err, data) {
                 if (err) {
                     console.log(err)
@@ -121,10 +123,23 @@ class RESTfulAPI {
             })
         })
 
+        app.get('/dietStats', function (request, response) {
+            console.log('GET request received at /dietStats');
+            mySqlHandler.findMaxMin(function (err, data) {
+                if (err) {
+                    console.log(err)
+                    response.sendStatus(500)
+                } else {
+                    response.send(data)
+                }
+            })
+        })
+
         app.post('/getDietFood', function (request, response) {
-            let diet_id = request.body.diet_id;
-            console.log('GET request received at /getDietFood');
-            mySqlHandler.getdietfood(diet_id, function (err, data) {
+            console.log('POST request received at /getDietFood');
+            let diet_name = request.body.diet_name;
+            console.log(diet_name)
+            mySqlHandler.getdietfood(diet_name, function (err, data) {
                 if (err) {
                     console.log(err)
                     response.sendStatus(500)
@@ -136,7 +151,7 @@ class RESTfulAPI {
 
         app.post('/getnutoffood', function (request, response) {
             let food_name = request.body.food_name;
-            console.log('GET request received at /getnutoffood');
+            console.log('POST request received at /getnutoffood');
             mySqlHandler.getnutoffood(food_name, function (err, data) {
                 if (err) {
                     console.log(err)
@@ -148,7 +163,7 @@ class RESTfulAPI {
         })
 
         app.post('/complete', function (request, response) {
-            console.log('GET request received at /complete');
+            console.log('POST request received at /complete');
             let limits = request.body.limits;
             let looking_for = request.body.max_nutrient;
             mySqlHandler.selectMax(limits, looking_for, function (err, data) {
@@ -163,7 +178,7 @@ class RESTfulAPI {
 
         app.post('/getTable', function (request, response) {
             let limits = request.body.limits;
-            console.log('GET request received at /getTable');
+            console.log('POST request received at /getTable');
             mySqlHandler.entrylist(limits, function (err, data) {
                     if (err) {
                         console.log(err);
@@ -176,7 +191,7 @@ class RESTfulAPI {
         })
 
         app.get('/foodPlans', function (request, response) {
-            console.log('GET request received at /food_plans');
+            console.log('GET request received at /foodPlans');
             mySqlHandler.listplans(function (err, data) {
                 if (err) {
                     console.log(err)
@@ -188,7 +203,7 @@ class RESTfulAPI {
         })
 
         app.post('/getLimits', function (request, response) {
-            console.log('GET request received at /getLimits');
+            console.log('POST request received at /getLimits');
             let plan_name = request.body.plan_name
             mySqlHandler.getlimits(plan_name, function (err, data) {
                 if (err) {
@@ -212,8 +227,50 @@ class RESTfulAPI {
             })
         })
 
+        app.post('/delete', function (request, response) {
+            console.log('POST request received at /delete');
+            let diet_name = request.body.diet_name;
+            mySqlHandler.deleteFromDiet(diet_name, function (err) {
+                if (err) {
+                    console.log(err)
+                    response.sendStatus(500)
+                } else {
+                    response.sendStatus(200)
+                }
+            })
+        })
+
+        app.post('/insert', function (request, response) {
+            console.log('POST request received at /insert');
+            let diet_name = request.body.diet_name;
+            let chosen_foods = request.body.chosen_foods;
+            mySqlHandler.insertIntoDiet(diet_name, chosen_foods, function (err) {
+                if (err) {
+                    console.log(err)
+                    response.sendStatus(500)
+                } else {
+                    response.sendStatus(200)
+                }
+            })
+        })
+
+        app.post('/update', function (request, response) {
+            console.log('POST request received at /update');
+            let diet_name = request.body.diet_name;
+            let plan_name = request.body.plan_name;
+            let user_name = request.body.user_name;
+            mySqlHandler.updateInDiets(user_name, diet_name, plan_name, function (err) {
+                if (err) {
+                    console.log(err)
+                    response.sendStatus(500)
+                } else {
+                    response.sendStatus(200)
+                }
+            })
+        })
+
         app.post('/uploadDiet', function (request, response) {
-            console.log('GET request received at /uploadDiet');
+            console.log('POST request received at /uploadDiet');
             let username = request.body.user;
             let diet_name = request.body.diet_name;
             let plan_name = request.body.food_plan;
@@ -229,7 +286,7 @@ class RESTfulAPI {
         })
 
         app.post('/uploadPlan', function (request, response) {
-            console.log('GET request received at /uploadPlan');
+            console.log('POST request received at /uploadPlan');
             let plan_name = request.body.plan_name
             let description = request.body.description
             let limits_nutrients = request.body.limits_nutrient

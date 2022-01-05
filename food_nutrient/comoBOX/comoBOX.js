@@ -1,10 +1,19 @@
 $(document).ready(function () {
 
+    $(document).ajaxStart(function () {
+        $(document.body).css({'cursor': 'wait'});
+        $(document.body).prepend($("<div id=\"loading-overlay\">"));
+    }).ajaxStop(function () {
+        $(document.body).css({'cursor': 'default'});
+        $(document.body).find("#loading-overlay").remove();
+    });
+
+    let mode = (sessionStorage.getItem("diet") === null) ? 'create' : 'update';
+    let curr_limits = {};
+
     if (sessionStorage.getItem("user") === null) {
         window.location.href = "http://localhost:8080/";
     }
-
-    let curr_limits = {};
 
     $.ajax({
         url: 'http://localhost:8080/foodPlans',
@@ -19,12 +28,79 @@ $(document).ready(function () {
                 format.on('change', function () {
                     alert(data.find(({food_plan_name}) => food_plan_name === $(this).val()).food_plan_description)
                 });
+                executeAfter();
             }
         },
         error: function () {
             alert('Failed to load plans')
         }
     })
+
+    function executeAfter() {
+        if (mode === 'create') {
+            let newDiv = $("<div id=\"dialog\">");
+            $(document.body).append(newDiv);
+            $("#name_diet").val("Name your diet");
+            $("#demoObject").text("Choose a diet plan");
+            $('#name_diet').on('click', function () {
+                newDiv.append("<input type=\"text\" id=\"diet_name\" style=\"display: inline-block;\">").dialog(opt).dialog('open');
+            });
+        }
+        else {
+            $("#name_diet").val("Finish updating");
+            $("#demoObject").text("Alter your diet plan");
+            $('#format').val(sessionStorage["plan"]).change();
+            create_ui(sessionStorage["plan"]);
+            let json = {'diet_name': sessionStorage["diet"]}
+            $.ajax({
+                url: 'http://localhost:8080/getDietFood',
+                method: 'post',
+                contentType: "application/json",
+                data: JSON.stringify(json),
+                success: function (data) {
+                    if (data.length > 0) {
+                        for (let j = 0; j < data.length; j++) {
+                            for (let i = 0; i < data[j].counted; i++)
+                                select_food(data[j].food_name, curr_limits);
+                        }
+                    }
+                },
+                error: function () {
+                    alert("Failed to load food of diet")
+                }
+            });
+            $('#name_diet').on('click', function () {
+                let data = {'diet_name': sessionStorage["diet"]};
+                $.ajax({
+                    url: 'http://localhost:8080/delete',
+                    contentType: "application/json",
+                    method: 'post',
+                    data: JSON.stringify(data),
+                    error: function () {
+                        alert('failed')
+                    },
+                    success: function () {
+                        let chosen_foods = [];
+                        getChosenFoods(chosen_foods);
+                        data = {
+                            'diet_name': sessionStorage["diet"],
+                            'chosen_foods': chosen_foods
+                        };
+                        $.ajax({
+                            url: 'http://localhost:8080/insert',
+                            contentType: "application/json",
+                            method: 'post',
+                            data: JSON.stringify(data),
+                            error: function () {
+                                alert('failed')
+                            }
+                        });
+                        window.location.href = "http://localhost:8080/diets.html";
+                    }
+                });
+            });
+        }
+    }
 
     function verify_limits(limits) {
         for (let i = 0; i < limits.length; i++) {
@@ -130,7 +206,6 @@ $(document).ready(function () {
         forward.off("click");
         let backward = $("#backward");
         backward.off("click");
-        console.log(limits);
         if (verify_limits(limits)) {
             let data = {'limits': limits};
             $.ajax({
@@ -187,38 +262,68 @@ $(document).ready(function () {
         }
     }
 
-    $('#done_button').on('click', function () {
+    function create_ui(plan) {
+        let table2 = $("#table2");
+        $("#table1").css('visibility', 'visible')
+        table2.css('visibility', 'visible')
+        $("#name_diet").css('visibility', 'visible')
+        $("#complete").css('visibility', 'visible')
+        $("#p11").css('visibility', 'visible')
+        $("#p12").css('visibility', 'visible')
+        table2.find('tbody').detach()
+        table2.append($('<tbody>'));
+        let data = {plan_name: plan}
+        $.ajax({
+            url: 'http://localhost:8080/getLimits',
+            contentType: "application/json",
+            method: 'post',
+            data: JSON.stringify(data),
+            success: function (data) {
+                if (data.length > 0) {
+                    curr_limits = data;
+                    create_table(curr_limits);
+                }
+            },
+            error: function () {
+                alert('failed')
+            }
+        });
+    }
+
+    let done = $('#done_button')
+    done.off('click');
+    done.on('click', function () {
         let selected = $('#format').find(":selected").val()
-        if (selected === 'Choose a diet plan') {
-            alert("Please choose a plan")
-        } else {
-            let table2 = $("#table2");
-            $("#table1").css('visibility', 'visible')
-            table2.css('visibility', 'visible')
-            $("#name_diet").css('visibility', 'visible')
-            $("#complete").css('visibility', 'visible')
-            $("#p11").css('visibility', 'visible')
-            $("#p12").css('visibility', 'visible')
-            table2.find('tbody').detach()
-            table2.append($('<tbody>'));
-            let data = {plan_name: selected}
+        if (mode === 'update') {
+            let data = {'diet_name': sessionStorage["diet"]};
             $.ajax({
-                url: 'http://localhost:8080/getLimits',
+                url: 'http://localhost:8080/delete',
                 contentType: "application/json",
                 method: 'post',
                 data: JSON.stringify(data),
-                success: function (data) {
-                    if (data.length > 0) {
-                        curr_limits = data;
-                        create_table(curr_limits);
-                    }
-                },
                 error: function () {
                     alert('failed')
+                },
+                success: function () {
+                    data = {'user_name': sessionStorage["user"],'diet_name': sessionStorage["diet"] ,'plan_name': selected};
+                    $.ajax({
+                        url: 'http://localhost:8080/update',
+                        contentType: "application/json",
+                        method: 'post',
+                        data: JSON.stringify(data),
+                        error: function () {
+                            alert('failed')
+                        }
+                    });
                 }
-            })
+            });
+        } else if (selected === 'Choose a diet plan') {
+                alert("Please choose a plan")
+                return false;
         }
+        create_ui(selected);
     })
+
 
     $("#complete").on('click', function () {
         if (verify_limits(curr_limits)) {
@@ -237,11 +342,23 @@ $(document).ready(function () {
                 error: function () {
                     alert('failed')
                 }
-            })
+            });
         }
     })
 
-    $('#dialog').dialog({
+    function getChosenFoods(chosen_foods) {
+        $("#table2 tbody tr").each(function () {
+            if ($(this).find(".amount").text() > 100) {
+                for (let i = 0; i < $(this).find(".amount").text() / 100; i++) {
+                    chosen_foods.push($(this).find(".text").text());
+                }
+            } else {
+                chosen_foods.push($(this).find(".text").text());
+            }
+        })
+    }
+
+    let opt = ({
         modal: true,
         autoOpen: false,
         title: "Name your diet",
@@ -252,15 +369,7 @@ $(document).ready(function () {
                     alert("Please give your diet a name")
                 } else {
                     let chosen_foods = [];
-                    $("#table2 tbody tr").each(function () {
-                        if ($(this).find(".amount").text() > 100) {
-                            for (let i = 0; i < $(this).find(".amount").text() / 100; i++) {
-                                chosen_foods.push($(this).find(".text").text());
-                            }
-                        } else {
-                            chosen_foods.push($(this).find(".text").text());
-                        }
-                    })
+                    getChosenFoods(chosen_foods);
                     let data = {
                         'user': sessionStorage["user"],
                         'diet_name': diet_name,
@@ -281,10 +390,6 @@ $(document).ready(function () {
                 }
             }
         }
-    });
-
-    $('#name_diet').on('click', function () {
-        $("#dialog").dialog('open');
     });
 
     $('#create_button').on('click', function () {

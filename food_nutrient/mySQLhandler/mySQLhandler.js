@@ -39,15 +39,12 @@ exports.checklogin = function (username, password, callback) {
 }
 
 function build_query(sql, limits) {
-    let where = " WHERE "
     let dict = {0: 'f0'}
     for (let i = 1; i < limits.length; i++) {
-        sql += ` JOIN food_nutrient AS f${i}`
-        where += `f0.fdc_id=f${i}.fdc_id and `
+        sql += ` JOIN food_nutrient AS f${i} ON f0.fdc_id=f${i}.fdc_id `
         dict[i] = `f${i}`
     }
-    sql += " ,food"
-    sql += where
+    sql += ",food WHERE "
     for (let i = 0; i < limits.length; i++) {
         sql += `${dict[i]}.nutrient_id = ${limits[i].nutrient_id} and ${dict[i]}.amount < ${limits[i].total_amount} and `
     }
@@ -109,32 +106,80 @@ exports.listnutrients = function (callback) {
 }
 
 exports.getdiets = function (username, callback) {
-    let sql = `SELECT id, diet_name, from_plan FROM users_diet WHERE user=\'${username}\';`
+    let sql = `SELECT diet_name, from_plan FROM users_diet WHERE user_name=\'${username}\';`
     con.query(sql, function (err, result) {
         if (err) callback(err, null);
         else callback(null, result);
     });
 }
 
-exports.getdietfood = function (diet_id, callback) {
-    let sql = `SELECT food_name, counted from food.food, (SELECT id_diet,food_id,COUNT(*) AS counted FROM diet_includes_food GROUP BY id_diet,food_id) 
-                as diets WHERE diets.id_diet = \'${diet_id}\' and diets.food_id = food.id;`
-    console.log(sql)
+exports.findMaxMin = function (callback) {
+    let sql = "(\n" +
+        "    SELECT from_plan, count(*) AS num \n" +
+        "    FROM users_diet \n" +
+        "    GROUP BY from_plan \n" +
+        "    ORDER BY num DESC \n" +
+        "    LIMIT 1\n" +
+        ")\n" +
+        "UNION ALL\n" +
+        "(\n" +
+        "    SELECT from_plan, count(*) AS num \n" +
+        "    FROM users_diet \n" +
+        "    GROUP BY from_plan \n" +
+        "    ORDER BY num ASC \n" +
+        "    LIMIT 1\n" +
+        ") ";
     con.query(sql, function (err, result) {
         if (err) callback(err, null);
         else callback(null, result);
+    });
+}
+
+exports.getdietfood = function (diet_name, callback) {
+    let sql = `SELECT food_name, counted from food.food, (SELECT name_diet,food_id,COUNT(*) AS counted FROM diet_includes_food GROUP BY name_diet,food_id) 
+                as diets WHERE diets.name_diet = \'${diet_name}\' and diets.food_id = food.id;`
+    con.query(sql, function (err, result) {
+        if (err) callback(err, null);
+        else callback(null, result);
+    });
+}
+
+exports.insertIntoDiet = function (diet_name, chosen_foods, callback) {
+    for (let i = 0; i < chosen_foods.length; i++) {
+        let sql = `INSERT INTO diet_includes_food(name_diet, food_id) SELECT \'${diet_name}\', id FROM food WHERE food_name=\'${chosen_foods[i]}\';`
+        console.log(sql)
+        con.query(sql, function (err) {
+            if (err) callback(err);
+        });
+    }
+}
+
+exports.deleteFromDiet = function (diet_name, callback) {
+    let sql = `DELETE FROM diet_includes_food WHERE name_diet=\'${diet_name}\';`
+    con.query(sql, function (err) {
+        if (err) callback(err);
+        else callback(null);
+    });
+}
+
+exports.updateInDiets = function (user_name, diet_name, plan_name, callback) {
+    let sql = `UPDATE users_diet SET from_plan=\'${plan_name}\' WHERE user_name=\'${user_name}\' AND diet_name=\'${diet_name}\';`
+    console.log(sql)
+    con.query(sql, function (err) {
+        if (err) callback(err);
+        else callback(null);
     });
 }
 
 exports.uploadUserDiet = function (username, diet_name, plan_name, food_list, callback) {
-    let sql1 = `INSERT INTO users_diet (user, diet_name, from_plan) VALUES (\'${username}\', \'${diet_name}\', \'${plan_name}\');`
+    let sql1 = `INSERT INTO users_diet (user_name, diet_name, from_plan) VALUES (\'${username}\', \'${diet_name}\', \'${plan_name}\');`
     con.query(sql1, function (err) {
         if (err) callback(err);
     });
     for (let i = 0; i < food_list.length; i++) {
         let food_name = food_list[i];
-        let sql2 = "INSERT INTO diet_includes_food (id_diet, food_id)\n" +
-            `SELECT users_diet.id, food.id FROM users_diet, food WHERE diet_name=\'${diet_name}\' and food_name=\'${food_name}\';`
+        let sql2 = "INSERT INTO diet_includes_food (name_diet, food_id)\n" +
+            `SELECT \'${diet_name}\', food.id FROM food WHERE food_name=\'${food_name}\';`
         con.query(sql2, function (err) {
             if (err) callback(err);
         });
