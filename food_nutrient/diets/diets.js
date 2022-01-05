@@ -19,8 +19,9 @@ $(document).ready(function () {
         url: 'http://localhost:8080/dietStats',
         method: 'get',
         success: function (data) {
-            $("#stats").text("Most amount of diets on the site: " + data[0].from_plan + " (" + data[0].num + ")");
-            $("#stats2").text(" And the least amount of diets: " + data[1].from_plan + " (" + data[1].num + ")");
+            $("#stats0").text("Few important indices about the Whole site:");
+            $("#stats").text("- The plan that contains the most amount of diets: " + data[0].from_plan + " (" + data[0].num + ")");
+            $("#stats2").text("- The plan that contains the least amount of diets: " + data[1].from_plan + " (" + data[1].num + ")");
         },
         error: function () {
             alert("Failed to load stats");
