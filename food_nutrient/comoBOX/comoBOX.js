@@ -1,6 +1,9 @@
 $(document).ready(function () {
 
-    let selected_foods = {};
+    if (sessionStorage.getItem("user") === null) {
+        window.location.href = "http://localhost:8080/";
+    }
+
     let curr_limits = {};
 
     $.ajax({
@@ -72,6 +75,8 @@ $(document).ready(function () {
         }
         return result;
     }
+
+    let selected_foods = {};
 
     function select_food(food, limits) {
         let data = {'food_name': food}
@@ -183,31 +188,36 @@ $(document).ready(function () {
     }
 
     $('#done_button').on('click', function () {
-        let table2 = $("#table2");
-        $("#table1").css('visibility', 'visible')
-        table2.css('visibility', 'visible')
-        $("#name_diet").css('visibility', 'visible')
-        $("#complete").css('visibility', 'visible')
-        $("#p11").css('visibility', 'visible')
-        $("#p12").css('visibility', 'visible')
-        table2.find('tbody').detach()
-        table2.append($('<tbody>'));
-        let data = {plan_name: $('#format').find(":selected").val()}
-        $.ajax({
-            url: 'http://localhost:8080/getLimits',
-            contentType: "application/json",
-            method: 'post',
-            data: JSON.stringify(data),
-            success: function (data) {
-                if (data.length > 0) {
-                    curr_limits = data;
-                    create_table(curr_limits);
+        let selected = $('#format').find(":selected").val()
+        if (selected === 'Choose a diet plan') {
+            alert("Please choose a plan")
+        } else {
+            let table2 = $("#table2");
+            $("#table1").css('visibility', 'visible')
+            table2.css('visibility', 'visible')
+            $("#name_diet").css('visibility', 'visible')
+            $("#complete").css('visibility', 'visible')
+            $("#p11").css('visibility', 'visible')
+            $("#p12").css('visibility', 'visible')
+            table2.find('tbody').detach()
+            table2.append($('<tbody>'));
+            let data = {plan_name: selected}
+            $.ajax({
+                url: 'http://localhost:8080/getLimits',
+                contentType: "application/json",
+                method: 'post',
+                data: JSON.stringify(data),
+                success: function (data) {
+                    if (data.length > 0) {
+                        curr_limits = data;
+                        create_table(curr_limits);
+                    }
+                },
+                error: function () {
+                    alert('failed')
                 }
-            },
-            error: function () {
-                alert('failed')
-            }
-        })
+            })
+        }
     })
 
     $("#complete").on('click', function () {
@@ -220,7 +230,6 @@ $(document).ready(function () {
                 data: JSON.stringify(data),
                 success: function (data) {
                     if (data.length > 0) {
-                        console.log(data);
                         let food = data[0].food_name;
                         select_food(food, curr_limits);
                     }
@@ -238,8 +247,38 @@ $(document).ready(function () {
         title: "Name your diet",
         buttons: {
             "Done": function () {
-                alert($('#diet_name').val())
-                $(this).dialog("close");
+                let diet_name = $('#diet_name').val();
+                if(diet_name === '') {
+                    alert("Please give your diet a name")
+                } else {
+                    let chosen_foods = [];
+                    $("#table2 tbody tr").each(function () {
+                        if ($(this).find(".amount").text() > 100) {
+                            for (let i = 0; i < $(this).find(".amount").text() / 100; i++) {
+                                chosen_foods.push($(this).find(".text").text());
+                            }
+                        } else {
+                            chosen_foods.push($(this).find(".text").text());
+                        }
+                    })
+                    let data = {
+                        'user': sessionStorage["user"],
+                        'diet_name': diet_name,
+                        'food_plan': $('#format').find(":selected").val(),
+                        'chosen_foods': chosen_foods
+                    };
+                    $.ajax({
+                        url: 'http://localhost:8080/uploadDiet',
+                        method: 'post',
+                        contentType: "application/json",
+                        data: JSON.stringify(data),
+                        error: function () {
+                            alert("Failed to create your diet");
+                        }
+                    })
+                    $(this).dialog("close");
+                    window.location.href = "http://localhost:8080/diets.html";
+                }
             }
         }
     });

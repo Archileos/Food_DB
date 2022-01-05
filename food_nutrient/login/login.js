@@ -10,9 +10,8 @@ $(document).ready(function () {
             contentType: "application/json",
             data: JSON.stringify(data),
             success: function () {
-                localStorage["user"] = username;
+                sessionStorage["user"] = username;
                 window.location.href="http://localhost:8080/diets.html";
-
             },
             error: function () {
                 $('#login-error-msg-wrong-first').css('opacity', '1')

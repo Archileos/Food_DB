@@ -35,6 +35,90 @@
             text-align: center;
             color: #cccccc;
         }
+
+        /* Tooltip text */
+        .tooltip .tooltiptext2 {
+            font-size: 10px;
+            visibility: hidden;
+            width: 120px;
+            background-color: #0a0505;
+            color: #ffffff;
+            text-align: center;
+            padding: 5px 0;
+            border-radius: 10px;
+            border-style: groove;
+            border-color: #a6981a;
+            /* Position the tooltip text */
+            z-index: 1;
+            bottom: 100%;
+            left: 50%;
+            margin-left: -60px;
+            position: absolute;
+            /* Fade in tooltip */
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        /* Tooltip arrow */
+        .tooltip .tooltiptext2::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -7px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: rgba(10, 5, 5, 0.95) transparent transparent transparent;
+        }
+        /* Show the tooltip text when you mouse over the tooltip container */
+        .tooltip:hover .tooltiptext2 {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Tooltip container */
+        .tooltip {
+            position: relative;
+        }
+        /* Tooltip text */
+        .tooltip .tooltiptext{
+            font-size: 10px;
+            visibility: hidden;
+            width: 120px;
+            background-color: #0a0505;
+            color: #ffffff;
+            text-align: center;
+            padding: 5px 0;
+            border-radius: 10px;
+            border-style: groove;
+            border-color: #969696;
+            margin-left: 10px;
+            /* Position the tooltip text */
+            z-index: 1;
+            top:1%;
+            left: 100%;
+            position: absolute;
+            /* Fade in tooltip */
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        /* Tooltip arrow */
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 33%;
+            left: 0%;
+            transform: rotate(90deg);
+            margin-left: -15px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: rgba(10, 5, 5, 0.95) transparent transparent transparent;
+        }
+        /* Show the tooltip text when you mouse over the tooltip container */
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
         body#tinymce {
             background: #FFFFFF
         }
@@ -137,16 +221,9 @@
     <thead>
     <tr>
         <th>Food</th>
-        <th>Description</th>
+        <th>Amount(G)</th>
     </tr>
     </thead>
-    <tfoot>
-    <tr>
-        <td colspan="2">
-            <div class="links"><a href="#">&laquo;</a> <a class="active" href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a> <a href="#">&raquo;</a></div>
-        </td>
-    </tr>
-    </tfoot>
     <tbody>
     <tr>
         <td>cell1_1</td><td>cell2_1</td></tr>
@@ -189,7 +266,7 @@
     </tbody>
     </tr>
 </table>
-<table id="table" class="purpleTable" >
+<table id="table" class="purpleTable">
     <thead>
     <tr>
         <th>Diet</th>
@@ -197,24 +274,6 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td>cell1_1</td><td>cell2_1</td></tr>
-    <tr>
-        <td>cell1_2</td><td>cell2_2</td></tr>
-    <tr>
-        <td>cell1_3</td><td>cell2_3</td></tr>
-    <tr>
-        <td>cell1_4</td><td>cell2_4</td></tr>
-    <tr>
-        <td>cell1_5</td><td>cell2_5</td></tr>
-    <tr>
-        <td>cell1_6</td><td>cell2_6</td></tr>
-    <tr>
-        <td>cell1_7</td><td>cell2_7</td></tr>
-    <tr>
-        <td>cell1_8</td><td>cell2_8</td></tr>
-    <tr>
-        <td>cell1_9</td><td>cell2_9</td></tr>
     </tbody>
 </table>
 <br>

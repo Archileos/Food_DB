@@ -1,5 +1,9 @@
 $(document).ready(function () {
 
+    if (sessionStorage.getItem("user") === null) {
+        window.location.href = "http://localhost:8080/";
+    }
+
     let advanced_clicked = false;
     let loaded = false;
 
@@ -91,6 +95,10 @@ $(document).ready(function () {
                         }
                     }
                 })
+                if(checked.length === 0) {
+                    alert("Please choose a nutrient")
+                    send = false;
+                }
                 if (send) {
                     let data = {
                         plan_name: $('#plan_name').val(),
@@ -102,14 +110,12 @@ $(document).ready(function () {
                         method: 'post',
                         contentType: "application/json",
                         data: JSON.stringify(data),
-                        success: function () {
-                            window.location.href = "http://localhost:8080/comoBOX.html";
-                        },
                         error: function () {
-                            alert("Failed to create your plan, please try again")
+                            alert("Failed to create your plan, please try again");
                         }
                     });
                     $(this).dialog('close');
+                    window.location.href = "http://localhost:8080/comoBOX.html";
                 }
             }
         }

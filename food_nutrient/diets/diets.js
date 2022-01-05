@@ -1,21 +1,97 @@
 $(document).ready(function () {
 
-    $('#create_diet_button').on('click', function () {
-        window.location.href="http://localhost:8080/comoBOX.html";
+    let diet_data = {};
+
+    if (sessionStorage.getItem("user") === null) {
+        window.location.href = "http://localhost:8080/";
+    }
+
+    function write_elms(nutrient_data) {
+        let result = "";
+        for (let i = 0; i < nutrient_data.length; i++) {
+            result += nutrient_data[i].name + " " + nutrient_data[i].amount + " " + nutrient_data[i].unit_name + "<br>";
+        }
+        return result;
+    }
+
+    function findIndex(data, diet, plan) {
+        for (let index = 0; index < data.length; index++) {
+            if (data[index].diet_name === diet && data[index].from_plan === plan)
+                return index;
+        }
+        return -1;
+    }
+
+    $.ajax({
+        url: 'http://localhost:8080/getDiets',
+        method: 'post',
+        contentType: "application/json",
+        data: JSON.stringify({'user_name': sessionStorage["user"]}),
+        success: function (data) {
+            if (data.length > 0) {
+                for (let i = 0; i < data.length; i++) {
+                    const newRow = $("<tr>");
+                    let diet_name = '<p class="diet">' + data[i].diet_name + '</p>';
+                    let from_plan = '<p class="plan">' + data[i].from_plan + '</p>';
+                    newRow.append('<td> ' + diet_name + '</td>');
+                    newRow.append('<td> ' + from_plan + '</td>');
+                    $("#table tbody").append(newRow);
+                    newRow.on("click", function () {
+                        let table3 = $("#table3")
+                        table3.find('tbody').detach()
+                        table3.append($('<tbody>'));
+                        table3.css('visibility', 'visible')
+                        $('#table tr').each(function () {
+                            $(this).css('backgroundColor', '')
+                            $(this).removeClass('selected');
+                        })
+                        $(this).css('backgroundColor', 'yellow')
+                        $(this).addClass('selected');
+                        let json = {'diet_id': data[findIndex(data, $(this).find(".diet").text(), $(this).find(".plan").text())].id}
+                        $.ajax({
+                            url: 'http://localhost:8080/getDietFood',
+                            method: 'post',
+                            contentType: "application/json",
+                            data: JSON.stringify(json),
+                            success: function (data) {
+                                if (data.length > 0) {
+                                    diet_data = data;
+                                    for (let j = 0; j < data.length; j++) {
+                                        console.log(data[j].counted)
+                                        const newRow = $("<tr>");
+                                        let food_name = '<p class="diet">' + data[j].food_name + '</p>';
+                                        let amount = '<p class="amount">' + data[j].counted * 100 + '</p>';
+                                        let json = {'food_name': data[j].food_name}
+                                        $.ajax({
+                                            url: 'http://localhost:8080/getnutoffood',
+                                            contentType: "application/json",
+                                            method: 'post',
+                                            data: JSON.stringify(json),
+                                            success: function (data) {
+                                                console.log(data)
+                                                let tooltip = '<span class="tooltiptext2">' + write_elms(data) + '</span>';
+                                                newRow.append('<td class="tooltip"> ' + food_name + tooltip + '</td>');
+                                                newRow.append('<td> ' + amount + '</td>');
+                                                $("#table3").append(newRow)
+                                            }
+                                        })
+                                    }
+                                }
+                            },
+                            error: function () {
+                                alert("Failed to load food of diet")
+                            }
+                        })
+                    });
+                }
+            }
+        },
+        error: function () {
+            alert('Failed to load diets')
+        }
     })
 
-    $('#table tr').click(function () {
-        $("#table3").css('visibility', 'visible')
-        let value = ""
-        $(this).children('td').each(function () {
-            value += $(this).html() + " "
-        })
-        $('#table tr').each(function () {
-            $(this).css('backgroundColor', '')
-            $(this).removeClass('selected');
-        })
-        $(this).css('backgroundColor', 'yellow')
-        $(this).addClass('selected');
-        alert(value);
-    });
+    $('#create_diet_button').on('click', function () {
+        window.location.href = "http://localhost:8080/comoBOX.html";
+    })
 });

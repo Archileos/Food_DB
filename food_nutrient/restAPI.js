@@ -108,8 +108,34 @@ class RESTfulAPI {
             })
         })
 
+        app.post('/getDiets', function (request, response) {
+            let username = request.body.user_name;
+            console.log('GET request received at /getDiets');
+            mySqlHandler.getdiets(username, function (err, data) {
+                if (err) {
+                    console.log(err)
+                    response.sendStatus(500)
+                } else {
+                    response.send(data)
+                }
+            })
+        })
+
+        app.post('/getDietFood', function (request, response) {
+            let diet_id = request.body.diet_id;
+            console.log('GET request received at /getDietFood');
+            mySqlHandler.getdietfood(diet_id, function (err, data) {
+                if (err) {
+                    console.log(err)
+                    response.sendStatus(500)
+                } else {
+                    response.send(data)
+                }
+            })
+        })
+
         app.post('/getnutoffood', function (request, response) {
-            let food_name = request.body.food_name
+            let food_name = request.body.food_name;
             console.log('GET request received at /getnutoffood');
             mySqlHandler.getnutoffood(food_name, function (err, data) {
                 if (err) {
@@ -182,6 +208,22 @@ class RESTfulAPI {
                     response.status(500).send()
                 } else {
                     response.send(data)
+                }
+            })
+        })
+
+        app.post('/uploadDiet', function (request, response) {
+            console.log('GET request received at /uploadDiet');
+            let username = request.body.user;
+            let diet_name = request.body.diet_name;
+            let plan_name = request.body.food_plan;
+            let food_list = request.body.chosen_foods;
+            mySqlHandler.uploadUserDiet(username, diet_name, plan_name, food_list, function (err) {
+                if (err) {
+                    console.log(err)
+                    response.sendStatus(500)
+                } else {
+                    response.sendStatus(200)
                 }
             })
         })
