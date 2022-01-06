@@ -276,7 +276,6 @@ $(document).ready(function () {
                         $("#table1 #tbody" + index_on).show();
                         forward.click(function () {
                             if (index_on < num_tbody - 1) {
-                                console.log(index_on);
                                 $("#table1 #tbody" + index_on).hide();
                                 index_on++;
                                 $("#table1 #tbody" + index_on).show();

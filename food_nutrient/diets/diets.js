@@ -108,7 +108,6 @@ $(document).ready(function () {
                                             method: 'post',
                                             data: JSON.stringify(json),
                                             success: function (data) {
-                                                console.log(data)
                                                 let tooltip = '<span class="tooltiptext2">' + write_elms(data) + '</span>';
                                                 newRow.append('<td class="tooltip"> ' + food_name + tooltip + '</td>');
                                                 newRow.append('<td> ' + amount + '</td>');

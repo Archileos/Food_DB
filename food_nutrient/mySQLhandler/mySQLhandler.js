@@ -1,4 +1,4 @@
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 // Open connection with provided user
 var con = mysql.createConnection({
@@ -143,7 +143,7 @@ exports.findMaxMin = function (callback) {
 }
 
 exports.getdietfood = function (diet_name, user_name, callback) {
-    let sql = `SELECT food_name, counted from food.food, (SELECT name_diet,user_name,food_id,COUNT(*) AS counted FROM diet_includes_food GROUP BY user_name,name_diet,food_id) 
+    let sql = `SELECT food_name, counted from food, (SELECT name_diet,user_name,food_id,COUNT(*) AS counted FROM diet_includes_food GROUP BY user_name,name_diet,food_id) 
                 as diets WHERE diets.name_diet = \'${diet_name}\' and diets.user_name=\'${user_name}\' and diets.food_id = food.id;`
     con.query(sql, function (err, result) {
         if (err) callback(err, null);
@@ -162,7 +162,6 @@ exports.insertIntoDiet = function (diet_name, user_name, chosen_foods, callback)
 
 exports.deleteFromDiet = function (diet_name, user_name, callback) {
     let sql = `DELETE FROM diet_includes_food WHERE name_diet=\'${diet_name}\' and user_name=\'${user_name}\';`
-    console.log(sql)
     con.query(sql, function (err) {
         if (err) callback(err);
         else callback(null);
@@ -201,7 +200,7 @@ exports.uploadUserPlan = function (plan_name, description, limits_nutrients, cal
         let nut_name = limits_nutrients[i][0];
         let amount = limits_nutrients[i][1];
         if (amount < 0.01) amount = 0.1;
-        let sql2 = "INSERT INTO food.food_plan_limits_nutrient (food_plan_name, nutrient_id, total_amount)\n" +
+        let sql2 = "INSERT INTO food_plan_limits_nutrient (food_plan_name, nutrient_id, total_amount)\n" +
             `SELECT \'${plan_name}\' ,id, ${amount} FROM nutrient WHERE name=\'${nut_name}\';`
         con.query(sql2, function (err) {
             if (err) callback(err);
