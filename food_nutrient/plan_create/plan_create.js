@@ -1,5 +1,8 @@
 $(document).ready(function () {
 
+    /*
+    * This code is present at the start of every js file, and is intended to handle loading.
+    */
     $(document).ajaxStart(function () {
         $(document.body).css({'cursor': 'wait'});
         $(document.body).prepend($("<div id=\"loading-overlay\">"));
@@ -8,10 +11,17 @@ $(document).ready(function () {
         $(document.body).find("#loading-overlay").remove();
     });
 
+    /*
+     * If user has arrived to this point without a login, they will be redirected back to login
+     */
     if (sessionStorage.getItem("user") === null) {
         window.location.href = "http://localhost:8080/";
     }
 
+    /*
+     * Handle click on advanced, this will give the full list of nutrients and not just the 4 presented, cannot be
+     * clicked twice.
+     */
     let advanced_clicked = false;
     let loaded = false;
 
@@ -73,6 +83,9 @@ $(document).ready(function () {
         }
     });
 
+    /*
+     * Dialog that opens when the user finished creating their plan, allows the user to name their plan and describe it.
+     */
     $('#dialog').dialog({
         modal: true,
         autoOpen: false,
@@ -123,12 +136,14 @@ $(document).ready(function () {
                         }
                     });
                     $(this).dialog('close');
+                    // In the end the user is redirected back to the comobox screen.
                     window.location.href = "http://localhost:8080/comoBOX.html";
                 }
             }
         }
     })
 
+    // When done is clicked open the above dialog.
     $('#done').click(function () {
         $("#dialog").dialog('open');
     })

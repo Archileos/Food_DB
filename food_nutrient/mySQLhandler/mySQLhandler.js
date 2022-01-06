@@ -1,18 +1,25 @@
 const mysql = require('mysql');
 
+// Open connection with provided user
 var con = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "Alis12345",
+    password: "", // Don't forget to change
     database: "food"
 });
 
+// Attempt to connect to mysql server.
 exports.connect = function () {
     con.connect(function (err) {
         if (err) throw err;
         console.log("connected");
     });
 }
+
+/*
+ * The code below creates query strings and executes them as queries on mysql server. For further documentation of
+ * queries refer to project documentation.
+ */
 
 exports.adduser = function (username, password, callback) {
     let sql = `INSERT INTO users (username, password) VALUES (\'${username}\',\'${password}\');`
@@ -135,27 +142,27 @@ exports.findMaxMin = function (callback) {
     });
 }
 
-exports.getdietfood = function (diet_name, callback) {
-    let sql = `SELECT food_name, counted from food.food, (SELECT name_diet,food_id,COUNT(*) AS counted FROM diet_includes_food GROUP BY name_diet,food_id) 
-                as diets WHERE diets.name_diet = \'${diet_name}\' and diets.food_id = food.id;`
+exports.getdietfood = function (diet_name, user_name, callback) {
+    let sql = `SELECT food_name, counted from food.food, (SELECT name_diet,user_name,food_id,COUNT(*) AS counted FROM diet_includes_food GROUP BY user_name,name_diet,food_id) 
+                as diets WHERE diets.name_diet = \'${diet_name}\' and diets.user_name=\'${user_name}\' and diets.food_id = food.id;`
     con.query(sql, function (err, result) {
         if (err) callback(err, null);
         else callback(null, result);
     });
 }
 
-exports.insertIntoDiet = function (diet_name, chosen_foods, callback) {
+exports.insertIntoDiet = function (diet_name, user_name, chosen_foods, callback) {
     for (let i = 0; i < chosen_foods.length; i++) {
-        let sql = `INSERT INTO diet_includes_food(name_diet, food_id) SELECT \'${diet_name}\', id FROM food WHERE food_name=\'${chosen_foods[i]}\';`
-        console.log(sql)
+        let sql = `INSERT INTO diet_includes_food(name_diet, user_name, food_id) SELECT \'${diet_name}\', \'${user_name}\', id FROM food WHERE food_name=\'${chosen_foods[i]}\';`
         con.query(sql, function (err) {
             if (err) callback(err);
         });
     }
 }
 
-exports.deleteFromDiet = function (diet_name, callback) {
-    let sql = `DELETE FROM diet_includes_food WHERE name_diet=\'${diet_name}\';`
+exports.deleteFromDiet = function (diet_name, user_name, callback) {
+    let sql = `DELETE FROM diet_includes_food WHERE name_diet=\'${diet_name}\' and user_name=\'${user_name}\';`
+    console.log(sql)
     con.query(sql, function (err) {
         if (err) callback(err);
         else callback(null);
@@ -164,7 +171,6 @@ exports.deleteFromDiet = function (diet_name, callback) {
 
 exports.updateInDiets = function (user_name, diet_name, plan_name, callback) {
     let sql = `UPDATE users_diet SET from_plan=\'${plan_name}\' WHERE user_name=\'${user_name}\' AND diet_name=\'${diet_name}\';`
-    console.log(sql)
     con.query(sql, function (err) {
         if (err) callback(err);
         else callback(null);
@@ -178,8 +184,8 @@ exports.uploadUserDiet = function (username, diet_name, plan_name, food_list, ca
     });
     for (let i = 0; i < food_list.length; i++) {
         let food_name = food_list[i];
-        let sql2 = "INSERT INTO diet_includes_food (name_diet, food_id)\n" +
-            `SELECT \'${diet_name}\', food.id FROM food WHERE food_name=\'${food_name}\';`
+        let sql2 = "INSERT INTO diet_includes_food (name_diet, user_name, food_id)\n" +
+            `SELECT \'${diet_name}\', \'${username}\', food.id FROM food WHERE food_name=\'${food_name}\';`
         con.query(sql2, function (err) {
             if (err) callback(err);
         });

@@ -1,5 +1,8 @@
 $(document).ready(function () {
 
+    /*
+    * This code is present at the start of every js file, and is intended to handle loading.
+    */
     $(document).ajaxStart(function () {
         $(document.body).css({'cursor': 'wait'});
         $(document.body).prepend($("<div id=\"loading-overlay\">"));
@@ -8,13 +11,22 @@ $(document).ready(function () {
         $(document.body).find("#loading-overlay").remove();
     });
 
+    /*
+     * Identify on what mode we are.
+     */
     let mode = (sessionStorage.getItem("diet") === null) ? 'create' : 'update';
     let curr_limits = {};
 
+    /*
+     * If user has arrived to this point without a login, they will be redirected back to login.
+     */
     if (sessionStorage.getItem("user") === null) {
         window.location.href = "http://localhost:8080/";
     }
 
+    /*
+     * As the screen loads, load in the available plans and handle according to the mode we are on.
+     */
     $.ajax({
         url: 'http://localhost:8080/foodPlans',
         method: 'get',
@@ -36,6 +48,9 @@ $(document).ready(function () {
         }
     })
 
+    /*
+     * If we are on create mode a pop-up dialog will be added, on update mode it'll be replaced by finish updating button.
+     */
     function executeAfter() {
         if (mode === 'create') {
             let newDiv = $("<div id=\"dialog\">");
@@ -51,7 +66,7 @@ $(document).ready(function () {
             $("#demoObject").text("Alter your diet plan");
             $('#format').val(sessionStorage["plan"]).change();
             create_ui(sessionStorage["plan"]);
-            let json = {'diet_name': sessionStorage["diet"]}
+            let json = {'diet_name': sessionStorage["diet"], 'user_name': sessionStorage["user"]}
             $.ajax({
                 url: 'http://localhost:8080/getDietFood',
                 method: 'post',
@@ -69,8 +84,9 @@ $(document).ready(function () {
                     alert("Failed to load food of diet")
                 }
             });
+            // Handle switching of diet plan while updating.
             $('#name_diet').on('click', function () {
-                let data = {'diet_name': sessionStorage["diet"]};
+                let data = {'diet_name': sessionStorage["diet"], 'user_name': sessionStorage["user"]};
                 $.ajax({
                     url: 'http://localhost:8080/delete',
                     contentType: "application/json",
@@ -84,6 +100,7 @@ $(document).ready(function () {
                         getChosenFoods(chosen_foods);
                         data = {
                             'diet_name': sessionStorage["diet"],
+                            'user_name': sessionStorage["user"],
                             'chosen_foods': chosen_foods
                         };
                         $.ajax({
@@ -102,6 +119,9 @@ $(document).ready(function () {
         }
     }
 
+    /*
+     * Check if any of the limits have been reached.
+     */
     function verify_limits(limits) {
         for (let i = 0; i < limits.length; i++) {
             if (limits[i].total_amount < 0.01)
@@ -110,6 +130,9 @@ $(document).ready(function () {
         return true;
     }
 
+    /*
+     * Find the nutrient with the largest limit allowance.
+     */
     function find_max_nutrient(limits) {
         let max = 0;
         let looking_for = 0;
@@ -122,6 +145,9 @@ $(document).ready(function () {
         return looking_for;
     }
 
+    /*
+     * Reduce limits according to a chosen food.
+     */
     function reduce_limits(limits, nutrient_data) {
         for (let j = 0; j < limits.length; j++) {
             for (let i = 0; i < nutrient_data.length; i++) {
@@ -133,6 +159,9 @@ $(document).ready(function () {
         return limits;
     }
 
+    /*
+     * Increase limits according to a chosen food.
+     */
     function increase_limits(limits, nutrient_data) {
         for (let j = 0; j < limits.length; j++) {
             for (let i = 0; i < nutrient_data.length; i++) {
@@ -144,6 +173,9 @@ $(document).ready(function () {
         return limits;
     }
 
+    /*
+     * This function writes nutrient data as a neat hover pop-up.
+     */
     function write_elms(nutrient_data) {
         let result = "";
         for (let i = 0; i < nutrient_data.length; i++) {
@@ -151,6 +183,10 @@ $(document).ready(function () {
         }
         return result;
     }
+
+    /*
+    * Handle food selection visually as well as physically in mysql using post requests.
+    */
 
     let selected_foods = {};
 
@@ -200,6 +236,9 @@ $(document).ready(function () {
         })
     }
 
+    /*
+     * Handle table creation using provided limits and calls to get additional data.
+     */
     function create_table(limits) {
         let table1 = $("#table1");
         let forward = $("#forward");
@@ -262,6 +301,9 @@ $(document).ready(function () {
         }
     }
 
+    /*
+     * Enable most of the visual aspects on screen.
+     */
     function create_ui(plan) {
         let table2 = $("#table2");
         $("#table1").css('visibility', 'visible')
@@ -290,12 +332,15 @@ $(document).ready(function () {
         });
     }
 
+    /*
+     * Done button handling in accordance with the given mode.
+     */
     let done = $('#done_button')
     done.off('click');
     done.on('click', function () {
         let selected = $('#format').find(":selected").val()
         if (mode === 'update') {
-            let data = {'diet_name': sessionStorage["diet"]};
+            let data = {'diet_name': sessionStorage["diet"], 'user_name': sessionStorage["user"]};
             $.ajax({
                 url: 'http://localhost:8080/delete',
                 contentType: "application/json",
@@ -315,16 +360,21 @@ $(document).ready(function () {
                             alert('failed')
                         }
                     });
+                    selected_foods = [];
+                    create_ui(selected);
                 }
             });
         } else if (selected === 'Choose a diet plan') {
                 alert("Please choose a plan")
                 return false;
+        } else {
+            create_ui(selected);
         }
-        create_ui(selected);
     })
 
-
+    /*
+     * Complete for me button handling.
+     */
     $("#complete").on('click', function () {
         if (verify_limits(curr_limits)) {
             let data = {'limits': curr_limits, 'max_nutrient': find_max_nutrient(curr_limits)};
@@ -346,6 +396,9 @@ $(document).ready(function () {
         }
     })
 
+    /*
+     * This function returns all the foods that have been chosen by the user.
+     */
     function getChosenFoods(chosen_foods) {
         $("#table2 tbody tr").each(function () {
             if ($(this).find(".amount").text() > 100) {
@@ -358,6 +411,7 @@ $(document).ready(function () {
         })
     }
 
+    // Dialog settings.
     let opt = ({
         modal: true,
         autoOpen: false,
@@ -392,6 +446,7 @@ $(document).ready(function () {
         }
     });
 
+    // If a user wishes to create their own plan, they'll be redirected to plan create.
     $('#create_button').on('click', function () {
         window.location.href = "http://localhost:8080/plan_create.html";
     })

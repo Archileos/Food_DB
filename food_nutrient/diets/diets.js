@@ -1,5 +1,8 @@
 $(document).ready(function () {
 
+    /*
+    * This code is present at the start of every js file, and is intended to handle loading.
+    */
     $(document).ajaxStart(function () {
         $(document.body).css({'cursor': 'wait'});
         $(document.body).prepend($("<div id=\"loading-overlay\">"));
@@ -11,10 +14,16 @@ $(document).ready(function () {
     let diet = '';
     let plan = '';
 
+    /*
+     * If user has arrived to this point without a login, they will be redirected back to login.
+     */
     if (sessionStorage.getItem("user") === null) {
         window.location.href = "http://localhost:8080/";
     }
 
+    /*
+     * Before the screen loads, insert usage statistics into the page to make it more lively.
+     */
     $.ajax({
         url: 'http://localhost:8080/dietStats',
         method: 'get',
@@ -28,6 +37,9 @@ $(document).ready(function () {
         }
     })
 
+    /*
+     * This function writes nutrient data as a neat hover pop-up.
+     */
     function write_elms(nutrient_data) {
         let result = "";
         for (let i = 0; i < nutrient_data.length; i++) {
@@ -36,6 +48,9 @@ $(document).ready(function () {
         return result;
     }
 
+    /*
+     * This function finds the index in data that contains all gives parameters.
+     */
     function findIndex(data, diet, plan) {
         for (let index = 0; index < data.length; index++) {
             if (data[index].diet_name === diet && data[index].from_plan === plan)
@@ -44,6 +59,9 @@ $(document).ready(function () {
         return -1;
     }
 
+    /*
+     * This sequence of post calls is responsible for the entire visual functionality of the tables on the screen.
+     */
     $.ajax({
         url: 'http://localhost:8080/getDiets',
         method: 'post',
@@ -71,7 +89,7 @@ $(document).ready(function () {
                         $(this).addClass('selected');
                         diet = $(this).find(".diet").text();
                         plan = $(this).find(".plan").text();
-                        let json = {'diet_name': data[findIndex(data, diet, plan)].diet_name}
+                        let json = {'diet_name': data[findIndex(data, diet, plan)].diet_name, user_name: sessionStorage["user"]}
                         $.ajax({
                             url: 'http://localhost:8080/getDietFood',
                             method: 'post',
@@ -113,17 +131,20 @@ $(document).ready(function () {
         }
     })
 
+    /*
+     * Call comobox screen on create mode.
+     */
     $('#create_diet_button').on('click', function () {
         sessionStorage.removeItem("diet");
         sessionStorage.removeItem("plan");
         window.location.href = "http://localhost:8080/comoBOX.html";
     })
-
+    /*
+     * Call comobox screen on update mode.
+     */
     $('#update_diet_button').on('click', function () {
-        console.log(plan)
         sessionStorage["diet"] = diet;
         sessionStorage["plan"] = plan;
-        alert(sessionStorage["plan"])
         window.location.href = "http://localhost:8080/comoBOX.html";
     })
 })

@@ -1,5 +1,9 @@
+// This file handles all the backend code of the login screen.
 $(document).ready(function () {
 
+    /*
+     * This code is present at the start of every js file, and is intended to handle loading.
+     */
     $(document).ajaxStart(function () {
         $(document.body).css({'cursor': 'wait'});
         $(document.body).prepend($("<div id=\"loading-overlay\">"));
@@ -8,6 +12,10 @@ $(document).ready(function () {
         $(document.body).find("#loading-overlay").remove();
     });
 
+    /*
+    * This batch handles logging in, it verifies if the user is present in the database via a post request and if
+    * everything is okay, the user is redirected to the diets screen, otherwise the user will receive an error message.
+    */
     $('#login-form-submit').on('click', function (event) {
         event.preventDefault()
         let username = $('#username-field').val()
@@ -27,6 +35,7 @@ $(document).ready(function () {
         })
     })
 
+    // On click on the register button, the user is redirected to register screen.
     $('#register-form-submit').on('click', function () {
         window.location.href="http://localhost:8080/register.html";
     })
